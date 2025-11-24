@@ -1,0 +1,8 @@
+{
+  "android": {
+    "package": "com.anonymous.islingconnect"
+  },
+  "ios": {
+    "bundleIdentifier": "com.anonymous.islingconnect"
+  }
+}
