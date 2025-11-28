@@ -54,11 +54,11 @@ export default function Login() {
         role === "pat_admin" ||
         role === "it_admin"
       ){
-        Alert.alert("You are an admin. Please login through web.")
+        Alert.alert("Invalid User")
       }
       
       else {
-        Linking.openURL("https://youtube.com");
+        Linking.openURL("User not found");
       }
     } catch (err: any) {
     console.log("Axios error:", err.response?.data || err.message);
