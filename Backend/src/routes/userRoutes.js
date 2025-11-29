@@ -8,22 +8,22 @@ router.get("/admin", verifyToken(["admin"]), (req, res) => {
 });
 
 // Only allow admin
-router.get("/ss_admin", verifyToken(["admin"]), (req, res) => {
+router.get("/ss_admin", verifyToken(["ss_admin"]), (req, res) => {
     res.json({ message: "Welcome Admin" });
 });
 
 // Only allow admin
-router.get("/pat_admin", verifyToken(["admin"]), (req, res) => {
+router.get("/pat_admin", verifyToken(["pat_admin"]), (req, res) => {
     res.json({ message: "Welcome Admin" });
 });
 
 // Only allow admin
-router.get("/it_admin", verifyToken(["admin"]), (req, res) => {
+router.get("/it_admin", verifyToken(["it_admin"]), (req, res) => {
     res.json({ message: "Welcome Admin" });
 });
 
 // Only allow admin
-router.get("/lf_admin", verifyToken(["admin"]), (req, res) => {
+router.get("/lf_admin", verifyToken(["lf_admin"]), (req, res) => {
     res.json({ message: "Welcome Admin" });
 });
 

@@ -1,5 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
+const cors = require("cors");
+
 
 const authRoutes = require("./src/routes/authRoute");
 const userRoutes = require("./src/routes/userRoutes")
@@ -12,6 +14,10 @@ const app = express();
 
 //Middleware
 app.use(express.json());
+
+app.use(cors({
+  origin: "http://localhost:5173"
+}));
 
 
 //Routes
