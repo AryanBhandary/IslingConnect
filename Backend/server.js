@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: "http://localhost:5173"
+  origin: "*"
 }));
 
 
@@ -27,7 +27,7 @@ app.use("/api/user/", userRoutes)
 
 //Starting the server
 const PORT = process.env.PORT || 5002;
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running at port ${PORT}`);
 });
 
