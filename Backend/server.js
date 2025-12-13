@@ -4,6 +4,7 @@ const cors = require("cors");
 
 
 const authRoutes = require("./src/routes/authRoute");
+const getUserRoutes = require("./src/routes/getUserRoutes");
 const userRoutes = require("./src/routes/userRoutes")
 
 
@@ -23,6 +24,7 @@ app.use(cors({
 //Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/user/", userRoutes)
+app.use("/api/admin", getUserRoutes)
 
 
 //Starting the server

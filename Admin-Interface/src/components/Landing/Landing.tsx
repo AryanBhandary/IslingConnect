@@ -29,12 +29,6 @@ export default function Landing() {
               >
                 Login
               </button>
-
-              <button
-                className="w-full font-bold bg-[#1D289C] text-white py-3 rounded-3xl hover:bg-[#09138aff] cursor-pointer"
-              >
-                Signup
-              </button>
           </div>
         </div>
       </section>

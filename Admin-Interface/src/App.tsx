@@ -2,11 +2,11 @@ import "./App.css";
 
 import { Route, Routes } from "react-router-dom";
 import { Landing, Login } from "./components";
-import Admin from "./components/Dashboard/Admin";
-import SS_Admin from "./components/Dashboard/SS_Admin";
-import IT_Admin from "./components/Dashboard/IT_Admin";
-import PAT_Admin from "./components/Dashboard/PAT_Admin";
-import LF_Admin from "./components/Dashboard/LF_Admin";
+import Admin from "./components/Dashboard/adminDashboard/Admin";
+import SS_Admin from "./components/Dashboard/ssDashboard/SS_Admin";
+import IT_Admin from "./components/Dashboard/itDashboard/IT_Admin";
+import PAT_Admin from "./components/Dashboard/patDashboard/PAT_Admin";
+import LF_Admin from "./components/Dashboard/lfDashboard/LF_Admin";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./components/Unauthorized";
 

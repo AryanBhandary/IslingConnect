@@ -25,8 +25,9 @@ export default function Login() {
         { email, password }
       );
 
-      const token = response.data.token;
+      const {token, user} = response.data;
       localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify( user ));
 
       const decoded: any = jwtDecode(token);
       const role = decoded.role;
@@ -59,7 +60,7 @@ export default function Login() {
 
   return (
     <>
-      <section className="relative w-full h-screen bg-black">
+      <section className="relative w-full h-screen">
         {/* Background Image */}
         <img
           src={background}
@@ -73,7 +74,7 @@ export default function Login() {
           <FaArrowLeft />
         </div>
 
-        <div className="absolute inset-0 flex flex-col justify-center items-center">
+        <div className="absolute inset-0 flex flex-col align-center justify-center items-center">
           <div className="flex flex-col justify-center items-center mx-auto mb-10">
             <img src={logo} alt="logo" className="w-25 h-25 rounded-3xl" />
             <h1 className="font-bold text-2xl text-white">IslingConnect</h1>
