@@ -44,6 +44,19 @@
   }
 
   .user-list-items {
-    @apply font-light py-3 text-sm 
+    @apply font-light p-3 text-sm 
+  }
+
+  .statscard {
+    @apply w-70 h-30 border-2 border-[var(--gray-bg)] rounded-lg p-4 flex flex-col justify-between cursor-pointer
+        transition-all duration-300
+        hover:shadow-md hover:-translate-y-1;
+  }
+
+  .filter-btn-active{
+    @apply bg-[var(--gray-border)] text-black transition-all duration-300 hover:shadow-md
+  }
+  .filter-btn-inactive{
+    @apply bg-white font-light hover:shadow-md transition-all duration-300
   }
 }

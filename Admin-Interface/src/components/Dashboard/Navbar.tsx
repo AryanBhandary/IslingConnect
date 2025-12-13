@@ -70,7 +70,7 @@ export default function NavBar() {
               <div className="text-sm">{email}</div>
             </div>
             <div
-              className="flex gap-2 items-center border border-[var(--gray-border)] bg-[var(--gray-bg)] rounded-lg px-4 py-2 cursor-pointer"
+              className="flex gap-2 items-center border border-[var(--gray-border)] bg-[var(--gray-bg)] rounded-lg px-4 py-2 hover:shadow-md transition-all duration-300 cursor-pointer"
               onClick={logout}
             >
               <div>Logout</div>

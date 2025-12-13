@@ -31,15 +31,15 @@ export default function UserList({ users }: UserListProps) {
   return (
     <>
 
-    <table className="w-full text-left font-normal">
-        <thead>
-            <tr className=" border-b-2 border-b-[var(--gray-border)]">
-                <th className="w-50 py-3">Name</th>
-                <th className="w-80">Email</th>
-                <th className="w-50">Phone</th>
-                <th className="w-50">Joined Date</th>
-                <th className="w-100">Role</th>
-                <th className="w-20">Actions</th> 
+    <table className="w-full text-left font-normal ">
+        <thead className="bg-white sticky top-0 ">
+            <tr className="bg-[var(--gray-bg)] ">
+                <th className="w-50 p-3">Name</th>
+                <th className="w-80 p-3">Email</th>
+                <th className="w-50 p-3">Phone</th>
+                <th className="w-50 p-3">Joined Date</th>
+                <th className="w-100 p-3">Role</th>
+                <th className="w-20 p-3">Actions</th> 
             </tr>
         </thead>
         <tbody>

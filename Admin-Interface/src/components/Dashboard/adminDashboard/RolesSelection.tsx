@@ -23,7 +23,7 @@ export default function RolesSelection( { value, onChange }: Props) {
   return (
     <div className="relative w-40">
       <div
-        className="h-12 flex justify-between p-2 gap-4 text-sm items-center border border-[var(--gray-border)] rounded-xl cursor-pointer"
+        className="h-12 flex justify-between p-2 gap-4 text-sm items-center bg-[var(--gray-bg)] rounded-xl cursor-pointer hover:shadow-md transition-all duration-300"
         onClick={() => setOpen(!open)}
       >
         <div>{currentRole}</div>
@@ -39,9 +39,9 @@ export default function RolesSelection( { value, onChange }: Props) {
                 onChange(role.value);
                 setOpen(false);
               }}
-              className={`flex items-center justify-between px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 ${
+              className={`flex items-center justify-between font-light px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 hover:shadow-md transition-all duration-300 rounded-xl${
                 value === role.value
-                  ? "font-bold bg-[var(--gray-border)]"
+                  ? "font-semibold bg-[var(--gray-border)] rounded-xl"
                   : ""
               }`}
             >

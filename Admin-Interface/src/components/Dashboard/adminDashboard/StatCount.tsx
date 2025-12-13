@@ -28,7 +28,7 @@ export default function StatCount() {
   return (
     <>
       <div className="flex gap-4 mt-6 ml-10">
-        <div className="w-70 h-30 border-2 border-[var(--gray-bg)] rounded-lg p-4 flex flex-col justify-between">
+        <div className="statscard">
           <div className="flex items-center justify-between">
             <div className="font-bold">Total Users</div>
             <div>
@@ -38,7 +38,7 @@ export default function StatCount() {
           <div className="font-bold text-4xl">{counts.totalUsers}</div>
         </div>
 
-        <div className="w-70 h-30 border-2 border-[var(--gray-bg)] rounded-lg p-4 flex flex-col justify-between">
+        <div className="statscard">
           <div className="flex items-center justify-between">
             <div className="font-bold">Total Admins</div>
             <div><MdOutlineShield size={24} color="#006FFF"/></div>
@@ -46,7 +46,7 @@ export default function StatCount() {
           <div className="font-bold text-4xl">{counts.totalAdmins}</div>
         </div>
 
-        <div className="w-70 h-30 border-2 border-[var(--gray-bg)] rounded-lg p-4 flex flex-col justify-between">
+        <div className="statscard">
           <div className="flex items-center justify-between">
             <div className="font-bold">Total Students</div>
              <div><FiUser size={24} color="#919191"/></div>
