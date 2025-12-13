@@ -1,5 +1,8 @@
 {
   "expo": {
+    "extra": {
+      "APP_API_URI": "http://192.168.1.68:5001"
+    },
     "name": "IslingApp",
     "slug": "IslingApp",
     "version": "1.0.0",
@@ -26,5 +29,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+    
   }
 }

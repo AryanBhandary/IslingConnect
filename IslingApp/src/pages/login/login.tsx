@@ -19,6 +19,7 @@ import {jwtDecode} from "jwt-decode";
 
 import { RootStackParamList } from "../../types";
 import styles from "../../styles/login";
+import { APP_API_URI } from "../../../config";
 
 export default function Login() {
 
@@ -35,7 +36,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        "http://100.64.231.107:5001/api/auth/login",  
+        `${APP_API_URI}/api/auth/login`,  
         { email, password }
       );
 

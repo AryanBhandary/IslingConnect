@@ -61,7 +61,7 @@ export default function UserManagement() {
 
   return (
     <>
-      <div className="mt-6 ml-10 mr-10">
+      <div className="mx-10">
         <h1 className="font-bold text-xl">User Management</h1>
         <div className="flex flex-col gap-2 justify-center max-w-full h-130 max-h-130 border border-[var(--gray-border)] mt-3 p-2 rounded-lg">
           <div className="flex justify-between items-center">

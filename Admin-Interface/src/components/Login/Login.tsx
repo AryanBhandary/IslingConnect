@@ -4,7 +4,7 @@ import logo from "../../assets/logo.png";
 import { FaArrowLeft } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -25,12 +25,13 @@ export default function Login() {
         { email, password }
       );
 
-      const {token, user} = response.data;
+      const {token, user, role} = response.data;
       localStorage.setItem("token", token);
+      localStorage.setItem("role", role );
       localStorage.setItem("user", JSON.stringify( user ));
 
-      const decoded: any = jwtDecode(token);
-      const role = decoded.role;
+      // const decoded: any = jwtDecode(token);
+      // const role = decoded.role;
 
       if (role === "admin") {
         navigate("/admin");

@@ -33,8 +33,8 @@ export default function UserList({ users }: UserListProps) {
 
     <table className="w-full text-left font-normal">
         <thead>
-            <tr className="border-b">
-                <th className="w-50">Name</th>
+            <tr className=" border-b-2 border-b-[var(--gray-border)]">
+                <th className="w-50 py-3">Name</th>
                 <th className="w-80">Email</th>
                 <th className="w-50">Phone</th>
                 <th className="w-50">Joined Date</th>
