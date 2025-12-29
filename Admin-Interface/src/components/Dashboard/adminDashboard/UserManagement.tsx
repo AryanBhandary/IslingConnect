@@ -1,34 +1,53 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { MdOutlineSearch } from "react-icons/md";
 import UserList from "./UserList";
 import RolesSelection from "./RolesSelection";
+import api from "../../../constants/axios";
+
+interface User {
+  _id: string;
+  username: string;
+  email: string;
+  phone: string;
+  role: string;
+  createdAt: string;
+}
 
 export default function UserManagement() {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [filter, setFilter] = useState<"all" | "admins" | "students">("all");
   const [roleFilter, setRoleFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Fetch users from backend
+  // 🔹 Fetch users
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5001/api/admin/getAll"
-        );
-        setUsers(response.data);
+        const res = await api.get("/api/admin/getAll");
+        setUsers(res.data);
       } catch (err) {
-        console.error("Error fetching users:", err);
+        console.error("Failed to fetch users", err);
       }
     };
     fetchUsers();
   }, []);
 
+  // 🔹 Change role
+  const handleChangeRole = async (id: string, role: string) => {
+    await api.put(`/api/admin/users/${id}/role`, { role });
+    setUsers((prev) =>
+      prev.map((u) => (u._id === id ? { ...u, role } : u))
+    );
+  };
+
+const handleDeleteUser = async (id: string) => {
+  await api.delete(`/api/admin/users/${id}`);
+    setUsers((prev) => prev.filter((u) => u._id !== id));
+};
+
   // Filtered users based on role
   const filteredUsers = users
     .filter((user: any) => {
-      // 1️⃣ Button filter
       if (filter === "admins") {
         if (
           !["ss_admin", "lf_admin", "pat_admin", "it_admin"].includes(user.role)
@@ -45,7 +64,6 @@ export default function UserManagement() {
         }
       }
 
-      // 2️⃣ Role dropdown filter
       if (roleFilter !== "all") {
         return user.role === roleFilter;
       }
@@ -70,55 +88,70 @@ export default function UserManagement() {
     );
 
   return (
-    <>
-      <div className="mx-10 my-5">
-        <h1 className="font-bold text-xl">User Management</h1>
-        <div className="flex flex-col gap-2 justify-center max-w-full h-130 max-h-130 border border-[var(--gray-border)] mt-3 p-2 rounded-xl">
-          <div className="flex justify-between items-center">
-            <div className="w-100 h-12 border border-[var(--gray-border)] flex text-center justify-center items-center gap-2 p-1 rounded-xl">
-              <button
-                className={`switch_btn ${filter === "all" ? "filter-btn-active" : "filter-btn-inactive"}`}
-                onClick={() => setFilter("all")}
-              >
-                All Users
-              </button>
-              <button
-                className={`switch_btn ${filter === "admins" ? "filter-btn-active" : "filter-btn-inactive"}`}
-                onClick={() => setFilter("admins")}
-              >
-                Admins
-              </button>
-              <button
-                className={`switch_btn ${filter === "students" ? "filter-btn-active" : "filter-btn-inactive"}`}
-                onClick={() => setFilter("students")}
-              >
-                Students
-              </button>
-            </div>
+    <div className="mx-10 my-5">
+      <h1 className="font-bold text-xl">User Management</h1>
 
-            <div className="flex gap-2 align-center justify-center">
-              <div className="p-2 flex gap-4 items-center w-65 bg-[var(--gray-bg)] rounded-xl transition-all duration-300 hover:shadow-md">
-                <MdOutlineSearch size={28} />
-                <input
-                  type="text"
-                  placeholder="Search Users..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full text-sm outline-none"
-                />
-              </div>
-              <div>
-                <RolesSelection value={roleFilter} onChange={setRoleFilter} />
-              </div>
-            </div>
+      <div className="flex flex-col gap-2 justify-center max-w-full h-130 max-h-130 border border-[var(--gray-border)] mt-3 p-2 rounded-xl">
+        {/* 🔹 Filters */}
+        <div className="flex justify-between items-center">
+          <div className="w-100 h-12 border border-[var(--gray-border)] flex text-center justify-center items-center gap-2 p-1 rounded-xl">
+            <button
+              className={`switch_btn ${
+                filter === "all"
+                  ? "filter-btn-active"
+                  : "filter-btn-inactive"
+              }`}
+              onClick={() => setFilter("all")}
+            >
+              All Users
+            </button>
+            <button
+              className={`switch_btn ${
+                filter === "admins"
+                  ? "filter-btn-active"
+                  : "filter-btn-inactive"
+              }`}
+              onClick={() => setFilter("admins")}
+            >
+              Admins
+            </button>
+            <button
+              className={`switch_btn ${
+                filter === "students"
+                  ? "filter-btn-active"
+                  : "filter-btn-inactive"
+              }`}
+              onClick={() => setFilter("students")}
+            >
+              Students
+            </button>
           </div>
 
-          <div className="h-full border border-[var(--gray-border)] rounded-xl overflow-scroll">
-            {/* User List */}
-            <UserList users={filteredUsers} />
+          <div className="flex gap-2 align-center justify-center">
+            <div className="p-2 flex gap-4 items-center w-65 bg-[var(--gray-bg)] rounded-xl transition-all duration-300 hover:shadow-md">
+              <MdOutlineSearch size={28} />
+              <input
+                type="text"
+                placeholder="Search Users..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full text-sm outline-none"
+              />
+            </div>
+
+            <RolesSelection value={roleFilter} onChange={setRoleFilter} />
           </div>
         </div>
+
+        {/* 🔹 User List */}
+        <div className="h-full border border-[var(--gray-border)] rounded-xl overflow-scroll">
+          <UserList
+            users={filteredUsers}
+            onChangeRole={handleChangeRole}
+            onDeleteUser={handleDeleteUser}
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 }

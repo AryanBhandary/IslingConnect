@@ -5,6 +5,8 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useState } from "react";
 import axios from "axios";
 
+import { APP_API_URI } from "../../constants/config"
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5001/api/auth/login",
+        `${APP_API_URI}/api/auth/login`,
         { email, password }
       );
 

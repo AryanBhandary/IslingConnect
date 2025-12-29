@@ -21,7 +21,7 @@ export default function RolesSelection( { value, onChange }: Props) {
   const currentRole = selectRole.find((r) => r.value === value)?.label;
 
   return (
-    <div className="relative w-40">
+    <div className="relative w-40 z-51">
       <div
         className="h-12 flex justify-between p-2 gap-4 text-sm items-center bg-[var(--gray-bg)] rounded-xl cursor-pointer hover:shadow-md transition-all duration-300"
         onClick={() => setOpen(!open)}

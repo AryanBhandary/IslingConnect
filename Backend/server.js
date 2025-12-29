@@ -6,6 +6,7 @@ const cors = require("cors");
 const authRoutes = require("./src/routes/authRoute");
 const getUserRoutes = require("./src/routes/getUserRoutes");
 const userRoutes = require("./src/routes/userRoutes")
+const adminActionsRoutes = require("./src/routes/adminActionsRoutes")
 
 
 const dbConnect = require("./src/config/dbConnect");
@@ -23,8 +24,10 @@ app.use(cors({
 
 //Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/user/", userRoutes)
-app.use("/api/admin", getUserRoutes)
+app.use("/api/user/", userRoutes);
+app.use("/api/admin", getUserRoutes);
+app.use("/api/admin/users", adminActionsRoutes);
+
 
 
 //Starting the server

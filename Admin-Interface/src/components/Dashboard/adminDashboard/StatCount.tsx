@@ -1,8 +1,10 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { LuUsers } from "react-icons/lu";
 import { MdOutlineShield } from "react-icons/md";
 import { FiUser } from "react-icons/fi";
+
+
+import api from "../../../constants/axios";
 
 
 export default function StatCount() {
@@ -15,9 +17,7 @@ export default function StatCount() {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:5001/api/admin/count"
-        );
+        const response = await api.get("/api/admin/count");
         setCounts(response.data);
       } catch (err) {
         console.error(err);

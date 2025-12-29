@@ -37,7 +37,9 @@ export default function Landing() {
           >
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.signupButton}>
+          <TouchableOpacity 
+            style={styles.signupButton}
+            onPress={() => navigation.navigate("Register")}>
             <Text style={styles.buttonText}>Signup</Text>
           </TouchableOpacity>
         </View>
