@@ -18,7 +18,7 @@ import {jwtDecode} from "jwt-decode";
 
 
 import { RootStackParamList } from "../../types";
-import styles from "../../styles/login";
+import styles from "./loginStyles";
 import { APP_API_URI } from "../../../config";
 
 export default function Login() {
@@ -30,43 +30,44 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    if (!email || !password) {
-      return Alert.alert("Fill in all the fields");
+  if (!email || !password) {
+    return Alert.alert("Fill in all the fields");
+  }
+
+  try {
+    const response = await axios.post(
+      `${APP_API_URI}/api/auth/login`,
+      { email, password }
+    );
+
+    const token = response.data.token;
+    await AsyncStorage.setItem("token", token);
+
+    const decoded: any = jwtDecode(token);
+
+    // 👇 extract user data from token
+    const user = {
+      id: decoded.id,
+      name: decoded.name,
+      email: decoded.email,
+      role: decoded.role,
+    };
+
+    // 👇 save user info
+    await AsyncStorage.setItem("user", JSON.stringify(user));
+
+    if (decoded.role === "user") {
+      navigation.navigate("Home");
+    } else {
+      Alert.alert("Invalid User");
     }
 
-    try {
-      const response = await axios.post(
-        `${APP_API_URI}/api/auth/login`,  
-        { email, password }
-      );
-
-      const token = response.data.token;
-      await AsyncStorage.setItem("token", token);
-
-      const decoded: any = jwtDecode(token);
-      const role = decoded.role;
-
-      if (role === "user") {
-        navigation.navigate("Home");
-      } 
-      else if (role === "admin" ||
-        role === "ss_admin" ||
-        role === "lf_admin" ||
-        role === "pat_admin" ||
-        role === "it_admin"
-      ){
-        Alert.alert("Invalid User")
-      }
-      
-      else {
-        Linking.openURL("User not found");
-      }
-    } catch (err: any) {
+  } catch (err: any) {
     console.log("Axios error:", err.response?.data || err.message);
     Alert.alert("Login failed", err.response?.data?.message || "Try again.");
-}
+  }
+};
 
-  };
 
   return (
     <ImageBackground

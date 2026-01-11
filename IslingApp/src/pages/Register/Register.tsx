@@ -15,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 
 import { RootStackParamList } from "../../types";
-import styles from "../../styles/login";
+import styles from "../Login/loginStyles";
 import { APP_API_URI } from "../../../config";
 
 export default function Register() {

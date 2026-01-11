@@ -6,7 +6,7 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import styles from "../../styles/landing";
+import styles from "./landingStyles";
 
 type LandingScreenProp = {
   navigate: (screen: string) => void;
