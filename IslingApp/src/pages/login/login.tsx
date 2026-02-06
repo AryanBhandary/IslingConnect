@@ -14,7 +14,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 
 import { RootStackParamList } from "../../types";
@@ -30,43 +30,43 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-  if (!email || !password) {
-    return Alert.alert("Fill in all the fields");
-  }
-
-  try {
-    const response = await axios.post(
-      `${APP_API_URI}/api/auth/login`,
-      { email, password }
-    );
-
-    const token = response.data.token;
-    await AsyncStorage.setItem("token", token);
-
-    const decoded: any = jwtDecode(token);
-
-    // 👇 extract user data from token
-    const user = {
-      id: decoded.id,
-      name: decoded.name,
-      email: decoded.email,
-      role: decoded.role,
-    };
-
-    // 👇 save user info
-    await AsyncStorage.setItem("user", JSON.stringify(user));
-
-    if (decoded.role === "user") {
-      navigation.navigate("Home");
-    } else {
-      Alert.alert("Invalid User");
+    if (!email || !password) {
+      return Alert.alert("Fill in all the fields");
     }
 
-  } catch (err: any) {
-    console.log("Axios error:", err.response?.data || err.message);
-    Alert.alert("Login failed", err.response?.data?.message || "Try again.");
-  }
-};
+    try {
+      const response = await axios.post(
+        `${APP_API_URI}/api/auth/login`,
+        { email, password }
+      );
+
+      const token = response.data.token;
+      await AsyncStorage.setItem("token", token);
+
+      const decoded: any = jwtDecode(token);
+
+      // 👇 extract user data from token
+      const user = {
+        id: decoded.id,
+        name: decoded.name,
+        email: decoded.email,
+        role: decoded.role,
+      };
+
+      // 👇 save user info
+      await AsyncStorage.setItem("user", JSON.stringify(user));
+
+      if (decoded.role === "user") {
+        navigation.navigate("MainTabs");
+      } else {
+        Alert.alert("Invalid User");
+      }
+
+    } catch (err: any) {
+      console.log("Axios error:", err.response?.data || err.message);
+      Alert.alert("Login failed", err.response?.data?.message || "Try again.");
+    }
+  };
 
 
   return (

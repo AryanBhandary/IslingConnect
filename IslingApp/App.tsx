@@ -10,23 +10,23 @@ import Profile from "./src/pages/Profile/Profile";
 import Notifications from "./src/pages/Notifications/Notifications";
 import Activity from "./src/pages/Activity/Activity";
 
+import MainTabNavigator from "./src/pages/Navbar/MainTabNavigator";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <>
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Landing" component={Landing} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Notifications" component={Notifications} />
-        <Stack.Screen name="Activity" component={Activity} />
-      </Stack.Navigator>
-    </NavigationContainer>
-     
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Landing" component={Landing} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+          {/* Main Tab Navigator replaces individual screens */}
+          <Stack.Screen name="MainTabs" component={MainTabNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+
     </>
   );
 }

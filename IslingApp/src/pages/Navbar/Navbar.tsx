@@ -1,17 +1,19 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-export default function Navbar() {
-  const navigation = useNavigation<any>();
-  const route = useRoute();
-  const routeName = route?.name || "";
+export default function Navbar({ state, navigation }: BottomTabBarProps) {
+  const routeName = state.routes[state.index].name;
+
+  const handleNavigate = (name: string) => {
+    navigation.navigate(name);
+  };
 
   return (
     <View style={styles.navbar}>
       {/* Home */}
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity onPress={() => handleNavigate("Home")}>
         <View style={styles.navItem}>
           <Ionicons
             name={routeName === "Home" ? "home" : "home-outline"}
@@ -33,7 +35,7 @@ export default function Navbar() {
       </TouchableOpacity>
 
       {/* Notifications */}
-      <TouchableOpacity onPress={() => navigation.navigate("Notifications")}>
+      <TouchableOpacity onPress={() => handleNavigate("Notifications")}>
         <View style={styles.navItem}>
           <Ionicons
             name={
@@ -60,7 +62,7 @@ export default function Navbar() {
       </TouchableOpacity>
 
       {/* Activity */}
-      <TouchableOpacity onPress={() => navigation.navigate("Activity")}>
+      <TouchableOpacity onPress={() => handleNavigate("Activity")}>
         <View style={styles.navItem}>
           <Ionicons
             name={routeName === "Activity" ? "flash" : "flash-outline"}
@@ -82,7 +84,7 @@ export default function Navbar() {
       </TouchableOpacity>
 
       {/* Profile */}
-      <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+      <TouchableOpacity onPress={() => handleNavigate("Profile")}>
         <View style={styles.navItem}>
           <Ionicons
             name={routeName === "Profile" ? "person" : "person-outline"}

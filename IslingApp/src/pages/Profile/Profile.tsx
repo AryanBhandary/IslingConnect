@@ -1,8 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Navbar from "../Navbar/Navbar";
-
 export default function Profile() {
   const navigation = useNavigation<any>();
 
@@ -10,14 +8,14 @@ export default function Profile() {
     // Optional: show a confirmation alert
     Alert.alert("Logout", "Are you sure you want to logout?", [
       { text: "Cancel", style: "cancel" },
-      { 
-        text: "Logout", 
-        style: "destructive", 
+      {
+        text: "Logout",
+        style: "destructive",
         onPress: () => {
           // Navigate back to Login or Landing page
           navigation.navigate("Login");
           // Optional: clear user session / tokens here
-        } 
+        }
       },
     ]);
   };
@@ -29,7 +27,6 @@ export default function Profile() {
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
-      <Navbar />
     </View>
   );
 }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { View, Text, ImageBackground, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import styles from "./homeStyles";
-import Navbar from "../Navbar/Navbar";
 import { useNavigation } from "@react-navigation/native";
 
 interface User {
@@ -43,8 +42,8 @@ const Avatar: React.FC<AvatarProps> = ({
 };
 
 export default function Background() {
-    const navigation = useNavigation<any>();
-    const state = navigation.getState();
+  const navigation = useNavigation<any>();
+  const state = navigation.getState();
   const [username, setUsername] = useState("User");
 
   const getGreeting = () => {
@@ -81,7 +80,7 @@ export default function Background() {
 
         {/* Username + Avatar container */}
         <TouchableOpacity
-        onPress={() => navigation.navigate("Profile")}
+          onPress={() => navigation.navigate("Profile")}
           style={{
             position: "absolute",
             top: 40,
@@ -110,8 +109,6 @@ export default function Background() {
         </Text>
         <Text style={styles.greetSubtitle}>How can we help you today?</Text>
       </View>
-
-      <Navbar />
     </>
   );
 }

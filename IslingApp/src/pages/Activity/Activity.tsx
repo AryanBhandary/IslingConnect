@@ -1,12 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Navbar from "../Navbar/Navbar";
-
 export default function Activity() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>This is Activity Page</Text>
-      <Navbar />
     </View>
   );
 }
