@@ -14,15 +14,14 @@ interface User {
 interface Props {
   users: User[];
   onChangeRole: (id: string, role: string) => void;
-  onDeleteUser: (id: string) => void;
 }
 
-export default function UserList({ users, onChangeRole, onDeleteUser }: Props) {
+export default function UserList({ users, onChangeRole }: Props) {
   const [openId, setOpenId] = useState<string | null>(null);
 
   if (users.length === 0) return <p className="text-center text-gray-500">No users found.</p>;
 
-  const roleText: Record<string,string> = {
+  const roleText: Record<string, string> = {
     ss_admin: "Students Service Admin",
     lf_admin: "Lost and Found Admin",
     it_admin: "IT Department Admin",
@@ -44,11 +43,11 @@ export default function UserList({ users, onChangeRole, onDeleteUser }: Props) {
       </thead>
       <tbody>
         {users.map(user => {
-          let roleColor = user.role==="ss_admin"?"bg-[var(--primary-light)] text-[var(--primary)]":
-                          user.role==="lf_admin"?"bg-[var(--lf-bg)] text-[var(--lf)]":
-                          user.role==="pat_admin"?"bg-[var(--pat-bg)] text-[var(--pat)]":
-                          user.role==="it_admin"?"bg-[var(--it-bg)] text-[var(--it)]":
-                          "bg-[var(--std-bg)] text-black";
+          const roleColor = user.role === "ss_admin" ? "bg-[var(--primary-light)] text-[var(--primary)]" :
+            user.role === "lf_admin" ? "bg-[var(--lf-bg)] text-[var(--lf)]" :
+              user.role === "pat_admin" ? "bg-[var(--pat-bg)] text-[var(--pat)]" :
+                user.role === "it_admin" ? "bg-[var(--it-bg)] text-[var(--it)]" :
+                  "bg-[var(--std-bg)] text-black";
 
           return (
             <tr key={user._id} className="border-b border-[var(--gray-border)]">
@@ -63,7 +62,7 @@ export default function UserList({ users, onChangeRole, onDeleteUser }: Props) {
               </td>
               <td className="p-3 text-center relative">
                 <IoMdMore size={24} className="cursor-pointer"
-                  onClick={() => setOpenId(openId===user._id?null:user._id)}
+                  onClick={() => setOpenId(openId === user._id ? null : user._id)}
                 />
                 {openId === user._id && (
                   <Actions
@@ -71,7 +70,6 @@ export default function UserList({ users, onChangeRole, onDeleteUser }: Props) {
                     currentRole={user.role}
                     onClose={() => setOpenId(null)}
                     onChangeRole={onChangeRole}
-                    onDelete={onDeleteUser}
                   />
                 )}
               </td>

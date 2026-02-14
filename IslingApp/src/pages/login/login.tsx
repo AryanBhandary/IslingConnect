@@ -57,7 +57,7 @@ export default function Login() {
       await AsyncStorage.setItem("user", JSON.stringify(user));
 
       if (decoded.role === "user") {
-        navigation.navigate("MainTabs");
+        navigation.navigate("AuthLoading");
       } else {
         Alert.alert("Invalid User");
       }
@@ -100,6 +100,8 @@ export default function Login() {
             value={email}
             onChangeText={setEmail}
             placeholder="Enter your email"
+            keyboardType="email-address"
+              autoCapitalize="none"
             style={styles.input}
           />
 

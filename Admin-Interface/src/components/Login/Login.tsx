@@ -27,37 +27,38 @@ export default function Login() {
         { email, password }
       );
 
-      const {token, user, role} = response.data;
+      const { token, user, role } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("role", role );
-      localStorage.setItem("user", JSON.stringify( user ));
+      localStorage.setItem("role", role);
+      localStorage.setItem("user", JSON.stringify(user));
 
       // const decoded: any = jwtDecode(token);
       // const role = decoded.role;
 
       if (role === "admin") {
         navigate("/admin");
-      } 
+      }
       else if (role === "ss_admin") {
         navigate("/ss_admin");
-      } 
+      }
       else if (role === "lf_admin") {
         navigate("/lf_admin");
-      } 
+      }
       else if (role === "it_admin") {
         navigate("/it_admin");
-      } 
+      }
       else if (role === "pat_admin") {
         navigate("/pat_admin");
-      } 
+      }
       else if (role === "user") {
         return alert("Invalid user. Access denied.");
-      } 
+      }
       else {
         return alert("User not found.");
       }
-    } catch (err: any) {
-      alert(err.response?.data?.message || "Login failed. Try again");
+    } catch (err: unknown) {
+      const axiosError = err as { response?: { data?: { message?: string } } };
+      alert(axiosError.response?.data?.message || "Login failed. Try again");
     }
   };
 

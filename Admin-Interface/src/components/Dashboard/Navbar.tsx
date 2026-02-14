@@ -1,26 +1,29 @@
 import { MdOutlineShield } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function NavBar() {
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [username, setUsername] = useState("");
-
-  useEffect(() => {
+  const [user] = useState(() => {
     const storedUser = localStorage.getItem("user");
     const storedRole = localStorage.getItem("role");
+
+    let email = "";
+    let role = "";
+    let username = "";
+
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      setEmail(parsedUser.email);
-      setRole(parsedUser.role);
-      setUsername(parsedUser.username);
+      email = parsedUser.email || "";
+      role = parsedUser.role || "";
+      username = parsedUser.username || "";
     }
 
     if (storedRole) {
-      setRole(storedRole); // plain string
+      role = storedRole;
     }
-  }, []);
+
+    return { email, role, username };
+  });
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -30,7 +33,7 @@ export default function NavBar() {
   };
 
   const getRoleText = () => {
-    switch (role) {
+    switch (user.role) {
       case "admin":
         return "Super Admin";
       case "ss_admin":
@@ -59,7 +62,7 @@ export default function NavBar() {
                 {getRoleText()}
               </div>
               <div className="text-[var(--ia-text)] text-sm font-light] capitalize">
-                {username}
+                {user.username}
               </div>
             </div>
           </div>
@@ -67,7 +70,7 @@ export default function NavBar() {
           <div className="flex justift-between items-center gap-10">
             <div className="flex flex-col items-start">
               <div className="font-bold">IslingConnect</div>
-              <div className="text-sm">{email}</div>
+              <div className="text-sm">{user.email}</div>
             </div>
             <div
               className="flex gap-2 items-center border border-[var(--gray-border)] bg-[var(--gray-bg)] rounded-lg px-4 py-2 hover:shadow-md transition-all duration-300 cursor-pointer"

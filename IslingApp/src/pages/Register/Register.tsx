@@ -67,7 +67,7 @@ export default function Register() {
       });
 
       Alert.alert("Success", "Account created successfully");
-      navigation.navigate("MainTabs");
+      navigation.navigate("AuthLoading");
     } catch (err: any) {
       console.log("Signup error:", err.response?.data || err.message);
       Alert.alert(

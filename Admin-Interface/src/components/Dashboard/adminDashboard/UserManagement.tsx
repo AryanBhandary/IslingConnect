@@ -40,21 +40,15 @@ export default function UserManagement() {
     );
   };
 
-const handleDeleteUser = async (id: string) => {
-  await api.delete(`/api/admin/users/${id}`);
-    setUsers((prev) => prev.filter((u) => u._id !== id));
-};
 
   // Filtered users based on role
   const filteredUsers = users
-    .filter((user: any) => {
+    .filter((user: User) => {
       if (filter === "admins") {
         if (
           !["ss_admin", "lf_admin", "pat_admin", "it_admin"].includes(user.role)
         ) {
-          return ["ss_admin", "lf_admin", "pat_admin", "it_admin"].includes(
-            user.role
-          );
+          return false;
         }
       }
 
@@ -83,7 +77,7 @@ const handleDeleteUser = async (id: string) => {
     })
     .slice()
     .sort(
-      (a: any, b: any) =>
+      (a: User, b: User) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
@@ -96,31 +90,28 @@ const handleDeleteUser = async (id: string) => {
         <div className="flex justify-between items-center">
           <div className="w-100 h-12 border border-[var(--gray-border)] flex text-center justify-center items-center gap-2 p-1 rounded-xl">
             <button
-              className={`switch_btn ${
-                filter === "all"
-                  ? "filter-btn-active"
-                  : "filter-btn-inactive"
-              }`}
+              className={`switch_btn ${filter === "all"
+                ? "filter-btn-active"
+                : "filter-btn-inactive"
+                }`}
               onClick={() => setFilter("all")}
             >
               All Users
             </button>
             <button
-              className={`switch_btn ${
-                filter === "admins"
-                  ? "filter-btn-active"
-                  : "filter-btn-inactive"
-              }`}
+              className={`switch_btn ${filter === "admins"
+                ? "filter-btn-active"
+                : "filter-btn-inactive"
+                }`}
               onClick={() => setFilter("admins")}
             >
               Admins
             </button>
             <button
-              className={`switch_btn ${
-                filter === "students"
-                  ? "filter-btn-active"
-                  : "filter-btn-inactive"
-              }`}
+              className={`switch_btn ${filter === "students"
+                ? "filter-btn-active"
+                : "filter-btn-inactive"
+                }`}
               onClick={() => setFilter("students")}
             >
               Students
@@ -148,7 +139,6 @@ const handleDeleteUser = async (id: string) => {
           <UserList
             users={filteredUsers}
             onChangeRole={handleChangeRole}
-            onDeleteUser={handleDeleteUser}
           />
         </div>
       </div>

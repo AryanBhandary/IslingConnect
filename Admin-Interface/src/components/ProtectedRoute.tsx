@@ -17,19 +17,20 @@ const ProtectedRoute = ({ allowedRoles }: Props) => {
     return <Navigate to="/login" replace />;
   }
 
+  let role = "";
   try {
     const decoded: DecodedToken = jwtDecode(token);
-    const role = decoded.role;
-
-    if (!allowedRoles.includes(role)) {
-      return <Navigate to="/unauthorized" replace />;
-    }
-
-    return <Outlet />;
+    role = decoded.role;
   } catch (err) {
     console.error("Token decode error", err);
     return <Navigate to="/login" replace />;
   }
+
+  if (!allowedRoles.includes(role)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

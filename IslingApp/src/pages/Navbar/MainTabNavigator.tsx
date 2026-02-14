@@ -5,6 +5,7 @@ import Notifications from "../Notifications/Notifications";
 import Activity from "../Activity/Activity";
 import Profile from "../Profile/Profile";
 import Navbar from "./Navbar";
+import ChatList from "../Chat/ChatList";
 
 const Tab = createBottomTabNavigator();
 

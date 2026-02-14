@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface Props {
   userId: string;
   currentRole: string;
   onClose: () => void;
   onChangeRole: (id: string, role: string) => void;
-  onDelete: (id: string) => void;
 }
 
 const ROLES = [
@@ -18,10 +17,6 @@ const ROLES = [
 
 export default function Actions({ userId, currentRole, onClose, onChangeRole }: Props) {
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const [confirm, setConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -38,33 +33,15 @@ export default function Actions({ userId, currentRole, onClose, onChangeRole }: 
       <div ref={menuRef} className="absolute right-8 top-2 bg-white border rounded-lg shadow-lg w-44 z-20 overflow-hidden">
         {ROLES.map(r => (
           <div key={r.value}
-            className={`px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors ${r.value===currentRole?"text-gray-400":""}`}
+            className={`px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors ${r.value === currentRole ? "text-gray-400" : ""}`}
             onClick={() => {
-              if (r.value!==currentRole) onChangeRole(userId,r.value);
+              if (r.value !== currentRole) onChangeRole(userId, r.value);
               onClose();
             }}>
             {r.label}
           </div>
         ))}
-        <div className="px-4 py-2 text-red-600 cursor-pointer hover:bg-red-50 transition-colors font-semibold"
-          onClick={() => setConfirm(true)}>Delete User</div>
       </div>
-
-      {confirm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-55">
-          <div className="bg-white w-80 max-w-sm p-6 rounded-xl shadow-2xl animate-fadeIn">
-            <h2 className="text-lg font-semibold text-gray-800">Delete User</h2>
-            <p className="mt-2 text-gray-600">Are you sure you want to delete this user? <br /> This action cannot be undone.</p>
-            <div className="flex gap-3 mt-6 justify-end">
-              <button onClick={() => setConfirm(false)} className="px-4 py-2 border rounded-md hover:bg-gray-100">Cancel</button>
-              <button disabled={loading}
-                className={`px-4 py-2 rounded-md text-white ${loading?"bg-red-300":"bg-red-600 hover:bg-red-700"}`}>
-                {loading?"Deleting...":"Delete"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

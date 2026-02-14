@@ -1,20 +1,25 @@
 import React from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import styles from "./homeStyles";
 
 export default function Departments() {
+  const navigation = useNavigation<any>();
   return (
     <View style={styles.departList}>
       <TouchableOpacity style={styles.options}>
-        <Image 
+        <Image
           source={require("../../../assets/ss.jpg")}
           style={styles.icon}
         />
         <Text style={styles.optionText}>Student Services</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.options}>
-        <Image 
+      <TouchableOpacity
+        style={styles.options}
+        onPress={() => navigation.navigate("LostFound")}
+      >
+        <Image
           source={require("../../../assets/lf.png")}
           style={styles.icon}
         />
@@ -22,7 +27,7 @@ export default function Departments() {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.options}>
-        <Image 
+        <Image
           source={require("../../../assets/it.png")}
           style={styles.icon}
         />
@@ -30,11 +35,11 @@ export default function Departments() {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.options} >
-        <Image 
+        <Image
           source={require("../../../assets/pat.jpg")}
           style={styles.icon}
         />
-        <Text style={[styles.optionText, {width: 85}]}>PAT Department</Text>
+        <Text style={[styles.optionText, { width: 85 }]}>PAT Department</Text>
       </TouchableOpacity>
     </View>
   );

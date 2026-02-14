@@ -1,65 +1,115 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+
 export default function Profile() {
   const navigation = useNavigation<any>();
+  const [user, setUser] = useState<any>(null);
 
-  const handleLogout = () => {
-    // Optional: show a confirmation alert
+  useEffect(() => {
+    const getUserData = async () => {
+      const userData = await AsyncStorage.getItem("user");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      }
+    };
+    getUserData();
+  }, []);
+
+  const handleLogout = async () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
       { text: "Cancel", style: "cancel" },
       {
         text: "Logout",
         style: "destructive",
-        onPress: () => {
-          // Navigate back to Login or Landing page
+        onPress: async () => {
+          await AsyncStorage.removeItem("token");
+          await AsyncStorage.removeItem("user");
           navigation.navigate("Login");
-          // Optional: clear user session / tokens here
         }
       },
     ]);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>This is Profile Page</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Ionicons name="person-circle-outline" size={100} color="#242FA3" />
+        <Text style={styles.userName}>{user?.name || "User"}</Text>
+        <Text style={styles.userEmail}>{user?.email || ""}</Text>
+      </View>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.menu}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate("MyReports")}
+        >
+          <MaterialCommunityIcons name="clipboard-text-outline" size={24} color="#333" />
+          <Text style={styles.menuText}>My Reports</Text>
+          <Ionicons name="chevron-forward" size={20} color="#999" />
+        </TouchableOpacity>
+
+
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Ionicons name="log-out-outline" size={24} color="#ff4d4d" />
+          <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: "#FFF",
+  },
+  header: {
     alignItems: "center",
+    paddingVertical: 40,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F0F0",
   },
-  content: {
+  userName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#000",
+    marginTop: 10,
+  },
+  userEmail: {
+    fontSize: 14,
+    color: "#666",
+    marginTop: 5,
+  },
+  menu: {
+    padding: 20,
+  },
+  menuItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F5F5F5",
+  },
+  menuText: {
     flex: 1,
-  },
-  text: {
-    fontSize: 20,
-    textAlign: "center",
-    marginBottom: 20,
+    fontSize: 16,
+    color: "#333",
+    marginLeft: 15,
   },
   logoutButton: {
-    backgroundColor: "#ff4d4d",
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 15,
+    marginTop: 20,
   },
   logoutText: {
-    color: "#fff",
+    color: "#ff4d4d",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  navbar: {
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
+    marginLeft: 15,
   },
 });
 
