@@ -1,4 +1,5 @@
 const Appointment = require("../models/Appointment");
+const User = require("../models/userModel");
 
 // --- Student Controllers ---
 
@@ -8,9 +9,18 @@ const bookPATAppointment = async (req, res) => {
         const { studentName, title, date, time } = req.body;
         const studentId = req.user.id;
 
+        // Fetch registered user details
+        const user = await User.findById(studentId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
         const newAppointment = new Appointment({
             student: studentId,
             studentName,
+            registeredName: user.username,
+            registeredEmail: user.email,
+            registeredPhone: user.phone,
             title,
             department: "PAT",
             date,
@@ -31,9 +41,18 @@ const bookITAppointment = async (req, res) => {
         const { studentName, title, date, time } = req.body;
         const studentId = req.user.id;
 
+        // Fetch registered user details
+        const user = await User.findById(studentId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
         const newAppointment = new Appointment({
             student: studentId,
             studentName,
+            registeredName: user.username,
+            registeredEmail: user.email,
+            registeredPhone: user.phone,
             title,
             department: "IT",
             date,

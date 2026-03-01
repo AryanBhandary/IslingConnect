@@ -11,6 +11,18 @@ const appointmentSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        registeredName: {
+            type: String,
+            required: true,
+        },
+        registeredEmail: {
+            type: String,
+            required: true,
+        },
+        registeredPhone: {
+            type: String,
+            required: true,
+        },
         title: {
             type: String,
             required: true,
