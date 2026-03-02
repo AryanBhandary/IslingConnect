@@ -10,6 +10,7 @@ export type RootStackParamList = {
   MyReports: undefined;
   Chat: { chatId: string; item: any; otherUser: any };
   ChatList: undefined;
+  BookAppointment: { department: "PAT" | "IT" };
 };
 
 export type MainTabParamList = {

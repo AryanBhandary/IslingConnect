@@ -16,6 +16,7 @@ import MyReports from "./src/pages/LostFound/MyReports";
 import Chat from "./src/pages/Chat/Chat";
 import ChatList from "./src/pages/Chat/ChatList";
 import AuthLoading from "./src/pages/Auth/AuthLoading";
+import BookAppointment from "./src/pages/Appointments/BookAppointment";
 
 import MainTabNavigator from "./src/pages/Navbar/MainTabNavigator";
 
@@ -38,6 +39,7 @@ export default function App() {
           <Stack.Screen name="MyReports" component={MyReports} options={{ headerShown: false }} />
           <Stack.Screen name="Chat" component={Chat} options={{ headerShown: false }} />
           <Stack.Screen name="ChatList" component={ChatList} options={{ headerShown: false }} />
+          <Stack.Screen name="BookAppointment" component={BookAppointment} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
 

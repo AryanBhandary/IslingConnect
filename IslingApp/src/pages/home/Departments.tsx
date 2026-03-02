@@ -26,7 +26,10 @@ export default function Departments() {
         <Text style={styles.optionText}>Lost & Found</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.options}>
+      <TouchableOpacity
+        style={styles.options}
+        onPress={() => navigation.navigate("BookAppointment", { department: "IT" })}
+      >
         <Image
           source={require("../../../assets/it.png")}
           style={styles.icon}
@@ -34,7 +37,10 @@ export default function Departments() {
         <Text style={styles.optionText}>IT Support</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.options} >
+      <TouchableOpacity
+        style={styles.options}
+        onPress={() => navigation.navigate("BookAppointment", { department: "PAT" })}
+      >
         <Image
           source={require("../../../assets/pat.jpg")}
           style={styles.icon}
