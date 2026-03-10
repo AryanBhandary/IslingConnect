@@ -88,7 +88,6 @@ export default function Background() {
             flexDirection: "row-reverse",
             alignItems: "center",
           }}
-
         >
           <Avatar username={username} />
         </TouchableOpacity>
