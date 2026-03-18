@@ -170,6 +170,38 @@ const updateITAppointmentStatus = async (req, res) => {
     }
 };
 
+// IT Appointment Stats
+const getITAppointmentStats = async (req, res) => {
+    try {
+        const [total, pending, confirmed, cancelled, rescheduled] = await Promise.all([
+            Appointment.countDocuments({ department: "IT" }),
+            Appointment.countDocuments({ department: "IT", status: "Pending" }),
+            Appointment.countDocuments({ department: "IT", status: "Confirmed" }),
+            Appointment.countDocuments({ department: "IT", status: "Cancelled" }),
+            Appointment.countDocuments({ department: "IT", status: "Reschedule Requested" }),
+        ]);
+        res.status(200).json({ total, pending, confirmed, cancelled, rescheduled });
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching IT stats", error: error.message });
+    }
+};
+
+// PAT Appointment Stats
+const getPATAppointmentStats = async (req, res) => {
+    try {
+        const [total, pending, confirmed, cancelled, rescheduled] = await Promise.all([
+            Appointment.countDocuments({ department: "PAT" }),
+            Appointment.countDocuments({ department: "PAT", status: "Pending" }),
+            Appointment.countDocuments({ department: "PAT", status: "Confirmed" }),
+            Appointment.countDocuments({ department: "PAT", status: "Cancelled" }),
+            Appointment.countDocuments({ department: "PAT", status: "Reschedule Requested" }),
+        ]);
+        res.status(200).json({ total, pending, confirmed, cancelled, rescheduled });
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching PAT stats", error: error.message });
+    }
+};
+
 module.exports = {
     bookPATAppointment,
     bookITAppointment,
@@ -179,4 +211,6 @@ module.exports = {
     getITAdminAppointments,
     updatePATAppointmentStatus,
     updateITAppointmentStatus,
+    getITAppointmentStats,
+    getPATAppointmentStats,
 };
