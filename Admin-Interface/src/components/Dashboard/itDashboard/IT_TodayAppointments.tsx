@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { LuCalendar, LuClock, LuUser, LuMail, LuPhone } from "react-icons/lu";
+import { MdCheck } from "react-icons/md";
 import api from "../../../constants/axios";
 
 interface Appointment {
@@ -17,6 +18,15 @@ interface Appointment {
 export default function IT_TodayAppointments() {
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const handleUpdateStatus = async (id: string, status: string) => {
+        try {
+            await api.put(`/api/appointments/admin/it/${id}/status`, { status });
+            fetchAppointments();
+        } catch (err) {
+            console.error("Failed to update status", err);
+        }
+    };
 
     const fetchAppointments = async () => {
         setLoading(true);
