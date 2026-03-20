@@ -2,10 +2,10 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Landing from "./src/pages/Landing/Landing";
-import Login from "./src/pages/Login/Login";
+import Landing from "./src/pages/Landing/landing";
+import Login from "./src/pages/Login/login";
 import Register from "./src/pages/Register/Register";
-import Home from "./src/pages/Home/Home";
+import Home from "./src/pages/Home/home";
 import Profile from "./src/pages/Profile/Profile";
 import Notifications from "./src/pages/Notifications/Notifications";
 import Activity from "./src/pages/Activity/Activity";

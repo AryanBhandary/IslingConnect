@@ -1,21 +1,50 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
+
+import UpcomingAppointments from "./UpcomingAppointments";
+import RescheduledAppointments from "./RescheduledAppointments";
+import PendingAppointments from "./PendingAppointments";
+
 export default function Activity() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>This is Activity Page</Text>
-    </View>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Activities</Text>
+      </View>
+      
+      <ScrollView 
+        contentContainerStyle={styles.scrollContainer} 
+        showsVerticalScrollIndicator={false}
+      >
+        <UpcomingAppointments />
+        <RescheduledAppointments />
+        <PendingAppointments />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    justifyContent: "space-between",
+    backgroundColor: "#FFFFFF",
   },
-  text: {
-    fontSize: 20,
-    textAlign: "center",
-    marginTop: 50,
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F0F0F0",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: "#000",
+  },
+  scrollContainer: {
+    padding: 20,
+    paddingBottom: 40,
+    flexGrow: 1,
   },
 });
