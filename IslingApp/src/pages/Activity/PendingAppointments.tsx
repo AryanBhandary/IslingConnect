@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 15,
     backgroundColor: "#FFFFFF",
+    gap: 15,
   },
   innerCard: {
     backgroundColor: "#F7F7F7",

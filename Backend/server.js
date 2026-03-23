@@ -13,7 +13,11 @@ const appointmentRoutes = require("./src/routes/AppointmentRoutes");
 
 
 const dbConnect = require("./src/config/dbConnect");
+const { startAppointmentScheduler } = require("./src/utils/appointmentScheduler");
 dbConnect();
+
+// Start the auto-complete scheduler for appointments
+startAppointmentScheduler();
 
 const app = express();
 

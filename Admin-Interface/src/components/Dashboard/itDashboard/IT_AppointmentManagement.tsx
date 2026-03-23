@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MdOutlineSearch, MdCheck, MdClose, MdRefresh } from "react-icons/md";
-import { LuUser, LuMail, LuPhone, LuCalendar, LuClock, LuFileText, LuBadgeCheck } from "react-icons/lu";
+import { LuUser, LuMail, LuPhone, LuCalendar, LuClock, LuFileText, LuBadgeCheck, LuCircleCheckBig } from "react-icons/lu";
 import api from "../../../constants/axios";
 
 interface Appointment {
@@ -92,7 +92,7 @@ export default function IT_AppointmentManagement() {
 
             {/* Status Tabs */}
             <div className="flex gap-2 mb-6">
-                {(["all", "Pending", "Confirmed", "Cancelled", "Reschedule Requested"] as const).map((status) => (
+                {(["all", "Pending", "Confirmed", "Completed", "Cancelled", "Reschedule Requested"] as const).map((status) => (
                     <button
                         key={status}
                         onClick={() => setStatusFilter(status)}
@@ -218,6 +218,12 @@ export default function IT_AppointmentManagement() {
                                         <div className="flex items-center gap-1.5">
                                             <MdRefresh size={16} className="text-[#1565C0]" />
                                             <span className="text-[10px] font-bold text-[#1565C0] uppercase">Awaiting Student</span>
+                                        </div>
+                                    )}
+                                    {app.status === "Completed" && (
+                                        <div className="flex items-center gap-1.5">
+                                            <LuCircleCheckBig size={16} className="text-[#6D28D9]" />
+                                            <span className="text-[10px] font-bold text-[#6D28D9] uppercase">Completed</span>
                                         </div>
                                     )}
                                 </div>
