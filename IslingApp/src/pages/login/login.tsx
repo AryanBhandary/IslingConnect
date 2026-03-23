@@ -45,11 +45,12 @@ export default function Login() {
 
       const decoded: any = jwtDecode(token);
 
-      // 👇 extract user data from token
+      // extract user data from token
       const user = {
         id: decoded.id,
         name: decoded.name,
         email: decoded.email,
+        phone: decoded.phone,
         role: decoded.role,
       };
 

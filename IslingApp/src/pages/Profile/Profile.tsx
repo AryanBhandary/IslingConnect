@@ -39,6 +39,7 @@ export default function Profile() {
         <Ionicons name="person-circle-outline" size={100} color="#242FA3" />
         <Text style={styles.userName}>{user?.name || "User"}</Text>
         <Text style={styles.userEmail}>{user?.email || ""}</Text>
+        <Text style={styles.userEmail}>{user?.phone || ""}</Text>
       </View>
 
       <View style={styles.menu}>
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#000",
     marginTop: 10,
+    textTransform: "capitalize",
   },
   userEmail: {
     fontSize: 14,
