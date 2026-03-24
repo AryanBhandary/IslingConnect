@@ -52,6 +52,14 @@ export default function Profile() {
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate("PastAppointments")}
+        >
+          <Ionicons name="time-outline" size={24} color="#333" />
+          <Text style={styles.menuText}>Past Appointments</Text>
+          <Ionicons name="chevron-forward" size={20} color="#999" />
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={24} color="#ff4d4d" />

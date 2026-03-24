@@ -14,13 +14,12 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 
-import { RootStackParamList } from "../../types";
 import styles from "../Login/loginStyles";
 import { APP_API_URI } from "../../../config";
 
 export default function Register() {
-  type NavigationProps = NavigationProp<RootStackParamList>;
-  const navigation = useNavigation<NavigationProps>();
+  type NavigationProps = NavigationProp<any>;
+  const navigation = useNavigation<any>();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

@@ -17,14 +17,12 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { jwtDecode } from "jwt-decode";
 
 
-import { RootStackParamList } from "../../types";
 import styles from "./loginStyles";
 import { APP_API_URI } from "../../../config";
 
 export default function Login() {
 
-  type NavigationProps = NavigationProp<RootStackParamList>;
-  const navigation = useNavigation<NavigationProps>();
+  const navigation = useNavigation<any>();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
