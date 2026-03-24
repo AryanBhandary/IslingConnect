@@ -79,14 +79,14 @@ export default function Login() {
       </TouchableOpacity>
 
       <View style={styles.content}>
-        <View style={styles.heading}>
+        <TouchableOpacity style={styles.heading} onPress={() => navigation.navigate("Landing")}>
           <Image
             source={require("../../../assets/logo.png")}
             style={styles.image as ImageStyle}
           />
           <Text style={styles.title}>IslingConnect</Text>
           <Text style={styles.subtitle}>Your all in one campus companion</Text>
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.form}>
           <Text style={styles.formTitle}>Welcome Back!</Text>

@@ -90,7 +90,7 @@ export default function Register() {
       </TouchableOpacity>
 
       <View style={styles.content}>
-        <View style={styles.heading}>
+        <TouchableOpacity style={styles.heading} onPress={() => navigation.navigate("Landing")}>
           <Image
             source={require("../../../assets/logo.png")}
             style={styles.image as ImageStyle}
@@ -99,7 +99,7 @@ export default function Register() {
           <Text style={styles.subtitle}>
             Your all in one campus companion
           </Text>
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.form}>
           <Text style={styles.formTitle}>Create Account</Text>
@@ -130,7 +130,7 @@ export default function Register() {
             />
             {!isOtpSent && (
               <TouchableOpacity
-                style={[styles.loginBtn, { height: 40, width: 80, marginTop: 0, marginLeft: 10, padding: 0, justifyContent: 'center' }]}
+                style={[styles.loginBtn, { height: 40, width: 80, marginTop: -20, marginLeft: 10, padding: 0, justifyContent: 'center' }]}
                 onPress={handleSendOtp}
                 disabled={loading}
               >
