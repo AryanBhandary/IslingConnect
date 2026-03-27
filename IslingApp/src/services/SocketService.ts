@@ -38,6 +38,18 @@ class SocketService {
     sendMessage(room: string, sender: string, content: string) {
         this.socket?.emit("send_message", { room, sender, content });
     }
+
+    joinUserRoom(userId: string) {
+        this.socket?.emit("join_user_room", userId);
+    }
+
+    on(event: string, callback: (data: any) => void) {
+        this.socket?.on(event, callback);
+    }
+
+    off(event: string) {
+        this.socket?.off(event);
+    }
 }
 
 export default new SocketService();

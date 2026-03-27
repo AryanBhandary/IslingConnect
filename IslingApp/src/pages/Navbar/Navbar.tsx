@@ -2,9 +2,11 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { useNotification } from "../../context/NotificationContext";
 
 export default function Navbar({ state, navigation }: BottomTabBarProps) {
   const routeName = state.routes[state.index].name;
+  const { unreadCount } = useNotification();
 
   const handleNavigate = (name: string) => {
     navigation.navigate(name);
@@ -37,15 +39,24 @@ export default function Navbar({ state, navigation }: BottomTabBarProps) {
       {/* Notifications */}
       <TouchableOpacity onPress={() => handleNavigate("Notifications")}>
         <View style={styles.navItem}>
-          <Ionicons
-            name={
-              routeName === "Notifications"
-                ? "notifications"
-                : "notifications-outline"
-            }
-            size={24}
-            color={routeName === "Notifications" ? "#000000" : "#535353"}
-          />
+          <View style={{ position: "relative" }}>
+            <Ionicons
+              name={
+                routeName === "Notifications"
+                  ? "notifications"
+                  : "notifications-outline"
+              }
+              size={24}
+              color={routeName === "Notifications" ? "#000000" : "#535353"}
+            />
+            {unreadCount > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </Text>
+              </View>
+            )}
+          </View>
           <Text
             style={[
               styles.link,
@@ -138,5 +149,22 @@ const styles = StyleSheet.create({
   link: {
     fontSize: 12,
     marginTop: 4,
+  },
+  badge: {
+    position: "absolute",
+    right: -6,
+    top: -4,
+    backgroundColor: "#FF3B30",
+    borderRadius: 10,
+    minWidth: 18,
+    height: 18,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 4,
+  },
+  badgeText: {
+    color: "#ffffff",
+    fontSize: 10,
+    fontWeight: "bold",
   },
 });

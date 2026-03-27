@@ -98,6 +98,16 @@ const studentHandleReschedule = async (req, res) => {
         }
 
         await appointment.save();
+
+        const io = req.app.get("socketio");
+        if (io && appointment.student) {
+            io.to(`user_${appointment.student}`).emit("appointment_status_changed", {
+                appointmentId: appointment._id,
+                department: appointment.department,
+                status: appointment.status
+            });
+        }
+
         res.status(200).json({ message: `Appointment ${action}ed successfully`, appointment });
     } catch (error) {
         res.status(500).json({ message: "Error handling reschedule", error: error.message });
@@ -142,6 +152,16 @@ const updatePATAppointmentStatus = async (req, res) => {
         }
 
         await appointment.save();
+
+        const io = req.app.get("socketio");
+        if (io && appointment.student) {
+            io.to(`user_${appointment.student}`).emit("appointment_status_changed", {
+                appointmentId: appointment._id,
+                department: "PAT",
+                status: appointment.status
+            });
+        }
+
         res.status(200).json({ message: "PAT Appointment status updated", appointment });
     } catch (error) {
         res.status(500).json({ message: "Error updating PAT appointment status", error: error.message });
@@ -164,6 +184,16 @@ const updateITAppointmentStatus = async (req, res) => {
         }
 
         await appointment.save();
+
+        const io = req.app.get("socketio");
+        if (io && appointment.student) {
+            io.to(`user_${appointment.student}`).emit("appointment_status_changed", {
+                appointmentId: appointment._id,
+                department: "IT",
+                status: appointment.status
+            });
+        }
+
         res.status(200).json({ message: "IT Appointment status updated", appointment });
     } catch (error) {
         res.status(500).json({ message: "Error updating IT appointment status", error: error.message });

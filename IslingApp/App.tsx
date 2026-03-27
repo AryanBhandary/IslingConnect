@@ -21,12 +21,13 @@ import BookIT from "./src/pages/Appointments/BookIT";
 import PastAppointments from "./src/pages/Activity/PastAppointments";
 
 import MainTabNavigator from "./src/pages/Navbar/MainTabNavigator";
+import { NotificationProvider } from "./src/context/NotificationContext";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <>
+    <NotificationProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Landing" component={Landing} />
@@ -46,7 +47,6 @@ export default function App() {
           <Stack.Screen name="PastAppointments" component={PastAppointments} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
-
-    </>
+    </NotificationProvider>
   );
 }

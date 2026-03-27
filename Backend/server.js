@@ -52,6 +52,9 @@ const io = new Server(server, {
   }
 });
 
+// Make io accessible globally via the app instance
+app.set("socketio", io);
+
 console.log(`[Config] Attempting to start server on port: ${PORT}`);
 console.log(`[Config] Ngrok status: Expected on ${PORT}`);
 
@@ -60,6 +63,11 @@ const { saveMessage } = require("./src/controllers/chatController");
 // Socket.io Logic
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
+
+  socket.on("join_user_room", (userId) => {
+    socket.join(`user_${userId}`);
+    console.log(`Socket ${socket.id} joined user room: user_${userId}`);
+  });
 
   socket.on("join_room", (room) => {
     socket.join(room);
