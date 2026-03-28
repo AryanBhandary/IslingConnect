@@ -19,6 +19,7 @@ import AuthLoading from "./src/pages/Auth/AuthLoading";
 import BookPAT from "./src/pages/Appointments/BookPAT";
 import BookIT from "./src/pages/Appointments/BookIT";
 import PastAppointments from "./src/pages/Activity/PastAppointments";
+import StudentServices from "./src/pages/StudentServices/StudentServices";
 
 import MainTabNavigator from "./src/pages/Navbar/MainTabNavigator";
 import { NotificationProvider } from "./src/context/NotificationContext";
@@ -45,6 +46,7 @@ export default function App() {
           <Stack.Screen name="BookPAT" component={BookPAT} options={{ headerShown: false }} />
           <Stack.Screen name="BookIT" component={BookIT} options={{ headerShown: false }} />
           <Stack.Screen name="PastAppointments" component={PastAppointments} options={{ headerShown: false }} />
+          <Stack.Screen name="StudentServices" component={StudentServices} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </NotificationProvider>

@@ -5,9 +5,13 @@ import styles from "./homeStyles";
 
 export default function Departments() {
   const navigation = useNavigation<any>();
+
   return (
     <View style={styles.departList}>
-      <TouchableOpacity style={styles.options}>
+      <TouchableOpacity 
+        style={styles.options} 
+        onPress={() => navigation.navigate("StudentServices")}
+      >
         <Image source={require("../../../assets/ss.jpg")} style={styles.icon} />
         <Text style={styles.optionText}>Student Services</Text>
       </TouchableOpacity>
