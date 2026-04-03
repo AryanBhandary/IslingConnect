@@ -6,10 +6,13 @@ import {
   ScrollView,
   SafeAreaView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { File, Paths } from "expo-file-system";
+import * as Sharing from "expo-sharing";
 import api from "../../services/api";
 import AppLoader from "../../components/AppLoader";
 import styles from "./studentServicesStyles";
@@ -19,6 +22,7 @@ export default function StudentServices() {
   const [loading, setLoading] = useState(false);
   const [reports, setReports] = useState<any[]>([]);
   const [fetching, setFetching] = useState(true);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const fetchReports = useCallback(async () => {
     try {
@@ -89,6 +93,31 @@ export default function StudentServices() {
     );
   };
 
+  const handleDownload = async (reportId: string) => {
+    try {
+      setDownloadingId(reportId);
+      const url = `${api.defaults.baseURL}/api/attendance/download/${reportId}`;
+      const destination = new File(Paths.cache, `attendance_report_${reportId}.pdf`);
+
+      const downloadedFile = await File.downloadFileAsync(url, destination, { idempotent: true });
+
+      const canShare = await Sharing.isAvailableAsync();
+      if (canShare) {
+        await Sharing.shareAsync(downloadedFile.uri, {
+          mimeType: "application/pdf",
+          dialogTitle: "Attendance Report",
+        });
+      } else {
+        Alert.alert("Downloaded", "Report downloaded successfully.");
+      }
+    } catch (err) {
+      console.error("Download error:", err);
+      Alert.alert("Error", "Could not download the report.");
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const d = new Date(dateString);
     return d.toLocaleDateString("en-GB", {
@@ -109,7 +138,7 @@ export default function StudentServices() {
 
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.listContainer}>
         {fetching ? (
-           <AppLoader variant="primary" size="large" />
+          <AppLoader variant="primary" size="large" />
         ) : reports.length === 0 ? (
           <View style={styles.emptyContainer}>
             <MaterialCommunityIcons
@@ -136,18 +165,35 @@ export default function StudentServices() {
                 </View>
               </View>
 
-              <TouchableOpacity style={styles.downloadButton}>
-                <Text style={styles.downloadButtonText}>Download Report</Text>
-                <Ionicons name="download-outline" size={18} color="#ffffff" />
-              </TouchableOpacity>
+              {report.status === "Sent" ? (
+                <TouchableOpacity
+                  style={styles.downloadButton}
+                  disabled={downloadingId === report._id}
+                  onPress={() => handleDownload(report._id)}
+                >
+                  {downloadingId === report._id ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <>
+                      <Text style={styles.downloadButtonText}>Download Report</Text>
+                      <Ionicons name="download-outline" size={18} color="#ffffff" />
+                    </>
+                  )}
+                </TouchableOpacity>
+              ) : (
+                <View style={[styles.downloadButton, { backgroundColor: '#B0B0B0' }]}>
+                  <Text style={styles.downloadButtonText}>Pending</Text>
+                  <Ionicons name="time-outline" size={18} color="#ffffff" />
+                </View>
+              )}
             </View>
           ))
         )}
       </ScrollView>
 
       <View style={styles.bottomContainer}>
-        <TouchableOpacity 
-          style={styles.requestButton} 
+        <TouchableOpacity
+          style={styles.requestButton}
           onPress={handleRequestAttendance}
           disabled={loading}
         >

@@ -23,6 +23,12 @@ const attendanceReportSchema = new mongoose.Schema(
       enum: ["Sent", "Pending"],
       default: "Pending",
     },
+    fileData: {
+      type: Buffer,
+    },
+    fileName: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

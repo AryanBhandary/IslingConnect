@@ -47,4 +47,34 @@ const sendEmail = async (to, subject, text) => {
     }
 };
 
-module.exports = { sendEmail };
+const sendEmailWithAttachment = async (to, subject, text, filename, buffer) => {
+    try {
+        const transport = getTransporter();
+
+        // Verify connection configuration
+        await transport.verify().catch(err => {
+            console.error("Transporter verification failed:", err);
+            throw new Error(`SMTP Verification Failed: ${err.message}`);
+        });
+
+        const info = await transport.sendMail({
+            from: `"IslingConnect" <${process.env.EMAIL_USER}>`,
+            to,
+            subject,
+            text,
+            attachments: [
+                {
+                    filename: filename,
+                    content: buffer
+                }
+            ]
+        });
+        console.log("Email with attachment sent successfully: %s", info.messageId);
+        return info;
+    } catch (error) {
+        console.error("Detailed Email Error with attachment:", error);
+        throw error;
+    }
+};
+
+module.exports = { sendEmail, sendEmailWithAttachment };
