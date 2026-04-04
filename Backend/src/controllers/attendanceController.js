@@ -111,10 +111,23 @@ const downloadAttendancePdf = async (req, res) => {
     }
 };
 
+const getAttendanceStats = async (req, res) => {
+    try {
+        const total = await AttendanceReport.countDocuments();
+        const pending = await AttendanceReport.countDocuments({ status: "Pending" });
+        const sent = await AttendanceReport.countDocuments({ status: "Sent" });
+        res.status(200).json({ total, pending, sent });
+    } catch (error) {
+        console.error("Error fetching attendance stats:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
 module.exports = {
     requestAttendanceReport,
     getStudentReports,
     getAllAttendanceRequests,
     sendAttendancePdf,
-    downloadAttendancePdf
+    downloadAttendancePdf,
+    getAttendanceStats
 };

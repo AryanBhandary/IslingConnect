@@ -3,11 +3,12 @@ const router = express.Router();
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
 
-const { requestAttendanceReport, getStudentReports, getAllAttendanceRequests, sendAttendancePdf, downloadAttendancePdf } = require("../controllers/attendanceController");
+const { requestAttendanceReport, getStudentReports, getAllAttendanceRequests, sendAttendancePdf, downloadAttendancePdf, getAttendanceStats } = require("../controllers/attendanceController");
 
 router.post("/request", requestAttendanceReport);
 router.get("/reports/:email", getStudentReports);
 router.get("/admin/requests", getAllAttendanceRequests);
+router.get("/admin/stats", getAttendanceStats);
 router.post("/send-pdf/:id", upload.single("pdf"), sendAttendancePdf);
 router.get("/download/:id", downloadAttendancePdf);
 

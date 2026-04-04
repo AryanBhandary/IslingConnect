@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MdOutlineSearch, MdOutlineUploadFile, MdCheckCircle } from "react-icons/md";
+import { MdOutlineSearch, MdOutlineUploadFile, MdCheckCircle, MdRefresh } from "react-icons/md";
 import { LuMail, LuCalendar, LuFileText } from "react-icons/lu";
 import api from "../../../constants/axios";
 
@@ -82,16 +82,25 @@ export default function AttendanceRequests() {
     <div className="mx-10 my-5">
       <div className="flex justify-between items-center mb-6">
         <h1 className="font-bold text-xl">Attendance Report Requests</h1>
-        <div className="p-2 flex gap-4 items-center w-80 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
-          <MdOutlineSearch size={24} color="#666" />
-          <input
-            type="text"
-            placeholder="Search by student or email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full text-sm outline-none bg-transparent"
-          />
-        </div>
+        <div className="flex gap-2 items-center">
+                    <div className="p-2 flex gap-4 items-center w-80 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
+              <MdOutlineSearch size={24} color="#666" />
+              <input
+                type="text"
+                placeholder="Search by student or email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full text-sm outline-none bg-transparent"
+              />
+            </div>
+            <button
+                onClick={fetchRequests}
+                className="p-3 bg-[var(--gray-bg)] text-black rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95"
+                title="Refresh"
+            >
+                <MdRefresh size={24} className={loading ? "animate-spin" : ""} />
+            </button>
+          </div>
       </div>
 
       {/* Tabs */}
