@@ -11,6 +11,7 @@ const lostFoundRoutes = require("./src/routes/lostFoundRoute");
 const chatRoutes = require("./src/routes/chatRoute");
 const appointmentRoutes = require("./src/routes/AppointmentRoutes");
 const attendanceRoutes = require("./src/routes/attendanceRoute");
+const reportRoutes = require("./src/routes/reportRoute");
 
 
 const dbConnect = require("./src/config/dbConnect");
@@ -39,6 +40,7 @@ app.use("/api/lost-found", lostFoundRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/attendance", attendanceRoutes);
+app.use("/api/reports", reportRoutes);
 
 
 
