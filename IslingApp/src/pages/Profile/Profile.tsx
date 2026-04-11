@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert, SafeAreaView, Modal, TextInput, ActivityIndicator, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import api from "../../services/api";
 
 export default function Profile() {
   const navigation = useNavigation<any>();
@@ -17,6 +18,61 @@ export default function Profile() {
     };
     getUserData();
   }, []);
+
+  // Password Reset State
+  const [resetModalVisible, setResetModalVisible] = useState(false);
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSendOtp = async () => {
+    if (!user?.email) return Alert.alert("Error", "User email not found");
+    setLoading(true);
+    try {
+      await api.post("/api/auth/send-reset-otp", { email: user.email });
+      setOtpSent(true);
+      Alert.alert("Success", "OTP has been sent to your email");
+    } catch (error: any) {
+      Alert.alert("Error", error.response?.data?.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!oldPassword || !newPassword || !confirmPassword || !otp) {
+      return Alert.alert("Error", "Please fill all fields and enter OTP");
+    }
+    if (newPassword !== confirmPassword) {
+      return Alert.alert("Error", "New passwords do not match");
+    }
+
+    setLoading(true);
+    try {
+      await api.post("/api/auth/reset-password", {
+        email: user.email,
+        oldPassword,
+        newPassword,
+        confirmPassword,
+        otp
+      });
+      Alert.alert("Success", "Password updated successfully");
+      setResetModalVisible(false);
+      // Reset form
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setOtp("");
+      setOtpSent(false);
+    } catch (error: any) {
+      Alert.alert("Error", error.response?.data?.message || "Failed to reset password");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogout = async () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -61,11 +117,103 @@ export default function Profile() {
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
 
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => setResetModalVisible(true)}
+        >
+          <Ionicons name="lock-closed-outline" size={24} color="#333" />
+          <Text style={styles.menuText}>Reset Password</Text>
+          <Ionicons name="chevron-forward" size={20} color="#999" />
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={24} color="#ff4d4d" />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Password Reset Modal */}
+      <Modal
+        visible={resetModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setResetModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Change Password</Text>
+              <TouchableOpacity onPress={() => setResetModalVisible(false)}>
+                <Ionicons name="close" size={24} color="#333" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text style={styles.label}>Old Password</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter current password"
+                secureTextEntry
+                value={oldPassword}
+                onChangeText={setOldPassword}
+              />
+
+              <Text style={styles.label}>New Password</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter new password"
+                secureTextEntry
+                value={newPassword}
+                onChangeText={setNewPassword}
+              />
+
+              <Text style={styles.label}>Confirm New Password</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Confirm new password"
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
+
+              <View style={styles.otpSection}>
+                <TouchableOpacity
+                  style={[styles.otpBtn, loading && { opacity: 0.7 }]}
+                  onPress={handleSendOtp}
+                  disabled={loading}
+                >
+                  {loading && !otpSent ? (
+                    <ActivityIndicator color="#FFF" size="small" />
+                  ) : (
+                    <Text style={styles.otpBtnText}>{otpSent ? "Resend OTP" : "Send OTP"}</Text>
+                  )}
+                </TouchableOpacity>
+
+                <TextInput
+                  style={[styles.otpInput, !otpSent && { backgroundColor: "#F0F0F0" }]}
+                  placeholder="OTP"
+                  keyboardType="number-pad"
+                  value={otp}
+                  onChangeText={setOtp}
+                  editable={otpSent}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={[styles.submitBtn, (!otpSent || loading) && { backgroundColor: "#CCC" }]}
+                onPress={handleResetPassword}
+                disabled={!otpSent || loading}
+              >
+                {loading && otpSent ? (
+                  <ActivityIndicator color="#FFF" size="small" />
+                ) : (
+                  <Text style={styles.submitBtnText}>Update Password</Text>
+                )}
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -120,6 +268,86 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginLeft: 15,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "flex-end",
+  },
+  modalContent: {
+    backgroundColor: "#FFF",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+    maxHeight: "80%",
+  },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  label: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 8,
+    marginTop: 10,
+  },
+  input: {
+    backgroundColor: "#F9F9F9",
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: "#333",
+  },
+  otpSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+    gap: 10,
+  },
+  otpBtn: {
+    backgroundColor: "#242FA3",
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    flex: 1,
+    alignItems: "center",
+  },
+  otpBtnText: {
+    color: "#FFF",
+    fontWeight: "bold",
+  },
+  otpInput: {
+    backgroundColor: "#F9F9F9",
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    color: "#333",
+    width: 100,
+    textAlign: "center",
+  },
+  submitBtn: {
+    backgroundColor: "#242FA3",
+    paddingVertical: 15,
+    borderRadius: 12,
+    alignItems: "center",
+    marginTop: 30,
+    marginBottom: 20,
+  },
+  submitBtnText: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 

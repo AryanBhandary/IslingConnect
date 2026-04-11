@@ -122,4 +122,82 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login, sendOtp };
+// SEND RESET OTP
+const sendResetOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Generate 6-digit OTP
+    const otp = crypto.randomInt(100000, 999999).toString();
+
+    // Save OTP to DB
+    await Otp.findOneAndUpdate(
+      { email },
+      { otp, createdAt: Date.now() },
+      { upsert: true, new: true }
+    );
+
+    // Send Email
+    await sendEmail(
+      email,
+      "IslingConnect Password Reset Code",
+      `Your password reset verification code is: ${otp}. It will expire in 10 minutes.`
+    );
+
+    res.status(200).json({ message: "Reset OTP sent successfully" });
+  } catch (err) {
+    console.error("Reset OTP send error:", err);
+    res.status(500).json({ message: "Failed to send reset OTP", error: err.message });
+  }
+};
+
+// RESET PASSWORD
+const resetPassword = async (req, res) => {
+  try {
+    const { email, oldPassword, newPassword, confirmPassword, otp } = req.body;
+
+    // 1. Validate matching passwords
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "New passwords do not match" });
+    }
+
+    // 2. Find user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // 3. Verify old password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Incorrect old password" });
+    }
+
+    // 4. Verify OTP
+    const otpRecord = await Otp.findOne({ email, otp });
+    if (!otpRecord) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    // 5. Update password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    // 6. Cleanup OTP
+    await Otp.deleteOne({ _id: otpRecord._id });
+
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (err) {
+    console.error("Reset password error:", err);
+    res.status(500).json({ message: "Server error during password reset" });
+  }
+};
+
+module.exports = { register, login, sendOtp, sendResetOtp, resetPassword };
