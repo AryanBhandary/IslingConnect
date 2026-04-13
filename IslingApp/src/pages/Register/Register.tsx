@@ -56,7 +56,7 @@ export default function Register() {
 
     setLoading(true);
     try {
-      await axios.post(`${APP_API_URI}/api/auth/register`, {
+      const response = await axios.post(`${APP_API_URI}/api/auth/register`, {
         username,
         email,
         phone,
@@ -65,8 +65,8 @@ export default function Register() {
         role: "user", // default student
       });
 
-      Alert.alert("Success", "Account created successfully");
-      navigation.navigate("AuthLoading");
+      Alert.alert("Success", "Account created successfully. Please login.");
+      navigation.navigate("Login");
     } catch (err: any) {
       console.log("Signup error:", err.response?.data || err.message);
       Alert.alert(

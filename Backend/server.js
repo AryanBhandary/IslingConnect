@@ -98,6 +98,10 @@ io.on("connection", (socket) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.send("Server is running 🚀");
+});
+
 server.listen(PORT, () => {
   console.log(`Server is running at port ${PORT}`);
 });

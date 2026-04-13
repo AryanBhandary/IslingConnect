@@ -177,6 +177,16 @@ export default function Profile() {
               />
 
               <View style={styles.otpSection}>
+
+                <TextInput
+                  style={[styles.otpInput, !otpSent && { backgroundColor: "#F0F0F0" }]}
+                  placeholder="OTP"
+                  keyboardType="number-pad"
+                  value={otp}
+                  onChangeText={setOtp}
+                  editable={otpSent}
+                />
+
                 <TouchableOpacity
                   style={[styles.otpBtn, loading && { opacity: 0.7 }]}
                   onPress={handleSendOtp}
@@ -189,14 +199,6 @@ export default function Profile() {
                   )}
                 </TouchableOpacity>
 
-                <TextInput
-                  style={[styles.otpInput, !otpSent && { backgroundColor: "#F0F0F0" }]}
-                  placeholder="OTP"
-                  keyboardType="number-pad"
-                  value={otp}
-                  onChangeText={setOtp}
-                  editable={otpSent}
-                />
               </View>
 
               <TouchableOpacity
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     color: "#333",
-    width: 100,
+    width: "70%",
     textAlign: "center",
   },
   submitBtn: {

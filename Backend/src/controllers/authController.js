@@ -71,7 +71,7 @@ const register = async (req, res) => {
 
     // generate JWT
     const token = jwt.sign(
-      { id: newUser._id, name: newUser.username, email: newUser.email, role: newUser.role },
+      { id: newUser._id, name: newUser.username, email: newUser.email, phone: newUser.phone, role: newUser.role },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -81,7 +81,7 @@ const register = async (req, res) => {
       message: "User Registered",
       token,
       role: newUser.role,
-      user: { id: newUser._id, name: newUser.username, email: newUser.email }
+      user: { id: newUser._id, name: newUser.username, email: newUser.email, phone: newUser.phone }
     });
 
   } catch (err) {
@@ -104,7 +104,6 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(401).json({ message: "Incorrect password" });
     }
-
     const token = jwt.sign(
       { id: user._id, name: user.username, phone: user.phone, email: user.email, role: user.role },
       process.env.JWT_SECRET,
