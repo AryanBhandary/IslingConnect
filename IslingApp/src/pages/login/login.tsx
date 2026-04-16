@@ -41,6 +41,8 @@ export default function Login() {
       const token = response.data.token;
       await AsyncStorage.setItem("token", token);
 
+      console.log("Full Response: ", response.data);
+
       const decoded: any = jwtDecode(token);
 
       // extract user data from token
@@ -54,6 +56,7 @@ export default function Login() {
 
       // 👇 save user info
       await AsyncStorage.setItem("user", JSON.stringify(user));
+
 
       if (decoded.role === "user") {
         navigation.navigate("AuthLoading");

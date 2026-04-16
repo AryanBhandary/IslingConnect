@@ -39,7 +39,8 @@ export default function LostFound() {
 
     const filteredItems = items.filter((item) => {
         const matchesSearch = item.itemName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            item.category.toLowerCase().includes(searchQuery.toLowerCase());
+            item.category.toLowerCase().includes(searchQuery.toLowerCase())||
+            item.location.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesFilter = filterType === "all" || item.type === filterType;
         return matchesSearch && matchesFilter;
     });

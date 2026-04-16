@@ -59,6 +59,7 @@ export default function PAT_AppointmentManagement() {
             const matchesSearch =
                 app.studentName.toLowerCase().includes(term) ||
                 app.registeredEmail.toLowerCase().includes(term) ||
+                app.registeredPhone?.toLowerCase().includes(term) ||
                 app.title.toLowerCase().includes(term);
             const matchesStatus = statusFilter === "all" || app.status === statusFilter;
             return matchesSearch && matchesStatus;

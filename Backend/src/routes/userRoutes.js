@@ -1,6 +1,10 @@
 const express = require ("express");
 const verifyToken = require ("../middlewares/authMiddleware");
+const { updateProfile } = require("../controllers/userControllers");
 const router = express.Router();
+
+// Update logged-in user's username and/or phone
+router.patch("/profile", verifyToken(), updateProfile);
 
 // Only allow admin
 router.get("/admin", verifyToken(["admin"]), (req, res) => {

@@ -24,27 +24,60 @@ export default function Profile() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleSendOtp = async () => {
-    if (!user?.email) return Alert.alert("Error", "User email not found");
-    setLoading(true);
+  // Edit Profile State
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editLoading, setEditLoading] = useState(false);
+
+  const openEditModal = () => {
+    setEditName(user?.name || user?.username || "");
+    setEditPhone(user?.phone || "");
+    setEditModalVisible(true);
+  };
+
+  const handleUpdateProfile = async () => {
+    const trimmedName = editName.trim();
+    const trimmedPhone = editPhone.trim();
+
+    if (!trimmedName && !trimmedPhone) {
+      return Alert.alert("Error", "Username and phone number are required");
+    }
+    if (!trimmedName) {
+      return Alert.alert("Error", "Please enter username");
+    }
+    if (!trimmedPhone) {
+      return Alert.alert("Error", "Please enter phone number");
+    }
+    setEditLoading(true);
     try {
-      await api.post("/api/auth/send-reset-otp", { email: user.email });
-      setOtpSent(true);
-      Alert.alert("Success", "OTP has been sent to your email");
+      const res = await api.patch("/api/user/profile", {
+        username: trimmedName,
+        phone: trimmedPhone,
+      });
+      const updatedUser = { ...user, name: res.data.user.username, username: res.data.user.username, phone: res.data.user.phone };
+      setUser(updatedUser);
+      await AsyncStorage.setItem("user", JSON.stringify(updatedUser));
+      Alert.alert("Success", "Profile updated successfully");
+      setEditModalVisible(false);
     } catch (error: any) {
-      Alert.alert("Error", error.response?.data?.message || "Failed to send OTP");
+      Alert.alert("Error", error.response?.data?.message || "Failed to update profile");
     } finally {
-      setLoading(false);
+      setEditLoading(false);
     }
   };
 
   const handleResetPassword = async () => {
-    if (!oldPassword || !newPassword || !confirmPassword || !otp) {
-      return Alert.alert("Error", "Please fill all fields and enter OTP");
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      return Alert.alert("Error", "Please fill all fields");
+    }
+    if (oldPassword === newPassword) {
+      return Alert.alert("Error", "New password must be different from old password");
     }
     if (newPassword !== confirmPassword) {
       return Alert.alert("Error", "New passwords do not match");
@@ -57,16 +90,12 @@ export default function Profile() {
         oldPassword,
         newPassword,
         confirmPassword,
-        otp
       });
       Alert.alert("Success", "Password updated successfully");
       setResetModalVisible(false);
-      // Reset form
       setOldPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      setOtp("");
-      setOtpSent(false);
     } catch (error: any) {
       Alert.alert("Error", error.response?.data?.message || "Failed to reset password");
     } finally {
@@ -119,6 +148,15 @@ export default function Profile() {
 
         <TouchableOpacity
           style={styles.menuItem}
+          onPress={openEditModal}
+        >
+          <Ionicons name="create-outline" size={24} color="#333" />
+          <Text style={styles.menuText}>Edit Profile</Text>
+          <Ionicons name="chevron-forward" size={20} color="#999" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.menuItem}
           onPress={() => setResetModalVisible(true)}
         >
           <Ionicons name="lock-closed-outline" size={24} color="#333" />
@@ -127,10 +165,59 @@ export default function Profile() {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={24} color="#ff4d4d" />
+          <Ionicons name="log-out-outline" size={24} color="#ff0000" />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Edit Profile Modal */}
+      <Modal
+        visible={editModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setEditModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Edit Profile</Text>
+              <TouchableOpacity onPress={() => setEditModalVisible(false)}>
+                <Ionicons name="close" size={24} color="#333" />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.label}>Username</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter new username"
+              value={editName}
+              onChangeText={setEditName}
+              autoCapitalize="none"
+            />
+
+            <Text style={styles.label}>Phone Number</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter new phone number"
+              value={editPhone}
+              onChangeText={setEditPhone}
+              keyboardType="phone-pad"
+            />
+
+            <TouchableOpacity
+              style={[styles.submitBtn, editLoading && { backgroundColor: "#CCC" }]}
+              onPress={handleUpdateProfile}
+              disabled={editLoading}
+            >
+              {editLoading ? (
+                <ActivityIndicator color="#FFF" size="small" />
+              ) : (
+                <Text style={styles.submitBtnText}>Save Changes</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Password Reset Modal */}
       <Modal
@@ -149,64 +236,54 @@ export default function Profile() {
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-              <Text style={styles.label}>Old Password</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter current password"
-                secureTextEntry
-                value={oldPassword}
-                onChangeText={setOldPassword}
-              />
+              <Text style={styles.label}>Current Password</Text>
+              <View style={styles.passwordRow}>
+                <TextInput
+                  style={[styles.input, { flex: 1 }]}
+                  placeholder="Enter current password"
+                  secureTextEntry={!showOld}
+                  value={oldPassword}
+                  onChangeText={setOldPassword}
+                />
+                <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowOld(p => !p)}>
+                  <Ionicons name={showOld ? "eye-off-outline" : "eye-outline"} size={22} color="#999" />
+                </TouchableOpacity>
+              </View>
 
               <Text style={styles.label}>New Password</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter new password"
-                secureTextEntry
-                value={newPassword}
-                onChangeText={setNewPassword}
-              />
+              <View style={styles.passwordRow}>
+                <TextInput
+                  style={[styles.input, { flex: 1 }]}
+                  placeholder="Enter new password"
+                  secureTextEntry={!showNew}
+                  value={newPassword}
+                  onChangeText={setNewPassword}
+                />
+                <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowNew(p => !p)}>
+                  <Ionicons name={showNew ? "eye-off-outline" : "eye-outline"} size={22} color="#999" />
+                </TouchableOpacity>
+              </View>
 
               <Text style={styles.label}>Confirm New Password</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Confirm new password"
-                secureTextEntry
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
-              />
-
-              <View style={styles.otpSection}>
-
+              <View style={styles.passwordRow}>
                 <TextInput
-                  style={[styles.otpInput, !otpSent && { backgroundColor: "#F0F0F0" }]}
-                  placeholder="OTP"
-                  keyboardType="number-pad"
-                  value={otp}
-                  onChangeText={setOtp}
-                  editable={otpSent}
+                  style={[styles.input, { flex: 1 }]}
+                  placeholder="Confirm new password"
+                  secureTextEntry={!showConfirm}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
                 />
-
-                <TouchableOpacity
-                  style={[styles.otpBtn, loading && { opacity: 0.7 }]}
-                  onPress={handleSendOtp}
-                  disabled={loading}
-                >
-                  {loading && !otpSent ? (
-                    <ActivityIndicator color="#FFF" size="small" />
-                  ) : (
-                    <Text style={styles.otpBtnText}>{otpSent ? "Resend OTP" : "Send OTP"}</Text>
-                  )}
+                <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowConfirm(p => !p)}>
+                  <Ionicons name={showConfirm ? "eye-off-outline" : "eye-outline"} size={22} color="#999" />
                 </TouchableOpacity>
-
               </View>
 
               <TouchableOpacity
-                style={[styles.submitBtn, (!otpSent || loading) && { backgroundColor: "#CCC" }]}
+                style={[styles.submitBtn, loading && { backgroundColor: "#CCC" }]}
                 onPress={handleResetPassword}
-                disabled={!otpSent || loading}
+                disabled={loading}
               >
-                {loading && otpSent ? (
+                {loading ? (
                   <ActivityIndicator color="#FFF" size="small" />
                 ) : (
                   <Text style={styles.submitBtnText}>Update Password</Text>
@@ -260,13 +337,17 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   logoutButton: {
+    justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 15,
-    marginTop: 20,
+    paddingVertical: 10,
+    marginTop: 250,
+    borderWidth: 2,
+    borderColor: "#ff0000",
+    borderRadius: 24,  
   },
   logoutText: {
-    color: "#ff4d4d",
+    color: "#ff0000",
     fontSize: 16,
     fontWeight: "bold",
     marginLeft: 15,
@@ -309,34 +390,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
   },
-  otpSection: {
+  passwordRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 20,
-    gap: 10,
+    gap: 8,
   },
-  otpBtn: {
-    backgroundColor: "#242FA3",
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    borderRadius: 8,
-    flex: 1,
-    alignItems: "center",
-  },
-  otpBtnText: {
-    color: "#FFF",
-    fontWeight: "bold",
-  },
-  otpInput: {
-    backgroundColor: "#F9F9F9",
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: "#333",
-    width: "70%",
-    textAlign: "center",
+  eyeBtn: {
+    padding: 10,
   },
   submitBtn: {
     backgroundColor: "#242FA3",

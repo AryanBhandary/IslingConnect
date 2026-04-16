@@ -11,16 +11,6 @@ const requestAttendanceReport = async (req, res) => {
         // Save request to DB
         const report = await AttendanceReport.create({ studentName, studentEmail });
 
-        // Emit a socket event so that the admin gets a real-time notification
-        const io = req.app.get("socketio");
-        if (io) {
-            io.emit("attendance_report_requested", {
-                studentName,
-                studentEmail,
-                status: "Pending",
-                timestamp: new Date()
-            });
-        }
 
         res.status(200).json({ success: true, message: "Attendance report requested successfully", report });
     } catch (error) {
