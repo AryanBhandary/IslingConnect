@@ -2,6 +2,63 @@ const Appointment = require("../models/Appointment");
 const User = require("../models/userModel");
 
 // --- Student Controllers ---
+const INACTIVE_APPOINTMENT_STATUSES = ["Cancelled", "Completed"];
+
+const parseAppointmentDateTime = (dateValue, timeValue) => {
+    const parsedDate = new Date(dateValue);
+    if (Number.isNaN(parsedDate.getTime()) || typeof timeValue !== "string") {
+        return null;
+    }
+
+    const sanitizedTime = timeValue.trim();
+    const twentyFourHourMatch = sanitizedTime.match(/^([01]?\d|2[0-3]):([0-5]\d)$/);
+    const twelveHourMatch = sanitizedTime.match(/^([1-9]|1[0-2]):([0-5]\d)\s*(AM|PM)$/i);
+
+    let hours;
+    let minutes;
+
+    if (twentyFourHourMatch) {
+        hours = Number.parseInt(twentyFourHourMatch[1], 10);
+        minutes = Number.parseInt(twentyFourHourMatch[2], 10);
+    } else if (twelveHourMatch) {
+        hours = Number.parseInt(twelveHourMatch[1], 10);
+        minutes = Number.parseInt(twelveHourMatch[2], 10);
+        const meridiem = twelveHourMatch[3].toUpperCase();
+
+        if (meridiem === "AM" && hours === 12) hours = 0;
+        if (meridiem === "PM" && hours !== 12) hours += 12;
+    } else {
+        return null;
+    }
+
+    const slotDateTime = new Date(parsedDate);
+    slotDateTime.setHours(hours, minutes, 0, 0);
+    return slotDateTime;
+};
+
+const hasConflictingAppointment = async (studentId, dateValue, timeValue) => {
+    const dayStart = new Date(dateValue);
+    dayStart.setHours(0, 0, 0, 0);
+
+    const dayEnd = new Date(dayStart);
+    dayEnd.setDate(dayEnd.getDate() + 1);
+
+    const existingAppointments = await Appointment.find({
+        student: studentId,
+        date: { $gte: dayStart, $lt: dayEnd },
+        status: { $nin: INACTIVE_APPOINTMENT_STATUSES },
+    });
+
+    const requestedDateTime = parseAppointmentDateTime(dateValue, timeValue);
+    if (!requestedDateTime) {
+        return false;
+    }
+
+    return existingAppointments.some((appointment) => {
+        const existingDateTime = parseAppointmentDateTime(appointment.date, appointment.time);
+        return existingDateTime && existingDateTime.getTime() === requestedDateTime.getTime();
+    });
+};
 
 // Book PAT Appointment
 const bookPATAppointment = async (req, res) => {
@@ -9,11 +66,30 @@ const bookPATAppointment = async (req, res) => {
         const { studentName, title, date, time } = req.body;
         const studentId = req.user.id;
 
+        const requestedDateTime = parseAppointmentDateTime(date, time);
+        if (!requestedDateTime) {
+            return res.status(400).json({ message: "Invalid appointment date or time" });
+        }
+
+        if (requestedDateTime.getTime() < Date.now()) {
+            return res.status(400).json({ message: "Past date/time cannot be selected for appointments" });
+        }
+
         // Fetch registered user details
         const user = await User.findById(studentId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+
+        const conflictExists = await hasConflictingAppointment(studentId, date, time);
+        if (conflictExists) {
+            return res.status(409).json({
+                message: "You already have an appointment at this date and time",
+            });
+        }
+
+        const appointmentDate = new Date(requestedDateTime);
+        appointmentDate.setHours(0, 0, 0, 0);
 
         const newAppointment = new Appointment({
             student: studentId,
@@ -23,8 +99,8 @@ const bookPATAppointment = async (req, res) => {
             registeredPhone: user.phone,
             title,
             department: "PAT",
-            date,
-            time,
+            date: appointmentDate,
+            time: time.trim(),
             status: "Pending",
         });
 
@@ -41,11 +117,30 @@ const bookITAppointment = async (req, res) => {
         const { studentName, title, date, time } = req.body;
         const studentId = req.user.id;
 
+        const requestedDateTime = parseAppointmentDateTime(date, time);
+        if (!requestedDateTime) {
+            return res.status(400).json({ message: "Invalid appointment date or time" });
+        }
+
+        if (requestedDateTime.getTime() < Date.now()) {
+            return res.status(400).json({ message: "Past date/time cannot be selected for appointments" });
+        }
+
         // Fetch registered user details
         const user = await User.findById(studentId);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+
+        const conflictExists = await hasConflictingAppointment(studentId, date, time);
+        if (conflictExists) {
+            return res.status(409).json({
+                message: "You already have an appointment at this date and time",
+            });
+        }
+
+        const appointmentDate = new Date(requestedDateTime);
+        appointmentDate.setHours(0, 0, 0, 0);
 
         const newAppointment = new Appointment({
             student: studentId,
@@ -55,8 +150,8 @@ const bookITAppointment = async (req, res) => {
             registeredPhone: user.phone,
             title,
             department: "IT",
-            date,
-            time,
+            date: appointmentDate,
+            time: time.trim(),
             status: "Pending",
         });
 

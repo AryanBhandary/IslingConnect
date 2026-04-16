@@ -21,13 +21,13 @@ router.get("/my-appointments", verifyToken(["user"]), getStudentAppointments);
 router.put("/reschedule-handle/:id", verifyToken(["user"]), studentHandleReschedule);
 
 // --- PAT Admin Routes ---
-router.get("/admin/pat/all", verifyToken(["admin", "ss_admin", "pat_admin"]), getPATAdminAppointments);
-router.put("/admin/pat/update-status/:id", verifyToken(["admin", "ss_admin", "pat_admin"]), updatePATAppointmentStatus);
-router.get("/admin/pat/stats", verifyToken(["admin", "ss_admin", "pat_admin"]), getPATAppointmentStats);
+router.get("/admin/pat/all", verifyToken(["admin", "pat_admin"]), getPATAdminAppointments);
+router.put("/admin/pat/update-status/:id", verifyToken(["admin", "pat_admin"]), updatePATAppointmentStatus);
+router.get("/admin/pat/stats", verifyToken(["admin", "pat_admin"]), getPATAppointmentStats);
 
 // --- IT Admin Routes ---
-router.get("/admin/it/all", verifyToken(["admin", "ss_admin", "it_admin"]), getITAdminAppointments);
-router.put("/admin/it/update-status/:id", verifyToken(["admin", "ss_admin", "it_admin"]), updateITAppointmentStatus);
-router.get("/admin/it/stats", verifyToken(["admin", "ss_admin", "it_admin"]), getITAppointmentStats);
+router.get("/admin/it/all", verifyToken(["admin", "it_admin"]), getITAdminAppointments);
+router.put("/admin/it/update-status/:id", verifyToken(["admin", "it_admin"]), updateITAppointmentStatus);
+router.get("/admin/it/stats", verifyToken(["admin", "it_admin"]), getITAppointmentStats);
 
 module.exports = router;

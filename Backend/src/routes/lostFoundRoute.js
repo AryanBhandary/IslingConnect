@@ -21,10 +21,10 @@ router.get("/items", getLostFoundItems);
 router.get("/my-items", verifyToken(), getMyItems);
 
 // GET /api/lost-found/admin/stats - Protected (Admin only)
-router.get("/admin/stats", verifyToken(["lf_admin"]), getLFStats);
+router.get("/admin/stats", verifyToken(["admin", "ss_admin", "lf_admin"]), getLFStats);
 
 // GET /api/lost-found/admin/items - Protected (Only for lf_admin)
-router.get("/admin/items", verifyToken(["lf_admin"]), getAdminItems);
+router.get("/admin/items", verifyToken(["admin", "ss_admin", "lf_admin"]), getAdminItems);
 
 // POST /api/lost-found/generate-code/:itemId - Protected (Uploader only)
 router.post("/generate-code/:itemId", verifyToken(), generateClaimCode);

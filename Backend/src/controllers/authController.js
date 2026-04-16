@@ -18,7 +18,7 @@ const sendOtp = async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User with this email already exists" });
     }
 
     // Generate 6-digit OTP
@@ -54,6 +54,19 @@ const register = async (req, res) => {
   try {
     const { username, email, phone, password, role, otp } = req.body;
 
+    // Prevent duplicate accounts with same email/phone before OTP verification
+    const existingUser = await User.findOne({
+      $or: [{ email }, { phone }]
+    });
+    if (existingUser) {
+      const duplicateField = existingUser.email === email ? "email" : "phone";
+      const message =
+        duplicateField === "phone"
+          ? "Phone number already in use"
+          : "User with this email already exists";
+      return res.status(409).json({ message, field: duplicateField });
+    }
+
     // Verify OTP
     const otpRecord = await Otp.findOne({ email, otp });
     if (!otpRecord) {
@@ -86,6 +99,15 @@ const register = async (req, res) => {
 
   } catch (err) {
     console.error(err);
+    if (err.code === 11000) {
+      if (err.keyPattern?.phone) {
+        return res.status(409).json({ message: "Phone number already in use", field: "phone" });
+      }
+      if (err.keyPattern?.email) {
+        return res.status(409).json({ message: "User with this email already exists", field: "email" });
+      }
+      return res.status(409).json({ message: "Duplicate value", field: "unknown" });
+    }
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
@@ -159,38 +181,34 @@ const sendResetOtp = async (req, res) => {
 // RESET PASSWORD
 const resetPassword = async (req, res) => {
   try {
-    const { email, oldPassword, newPassword, confirmPassword, otp } = req.body;
+    const { email, oldPassword, newPassword, confirmPassword } = req.body;
 
-    // 1. Validate matching passwords
+    // 1. Prevent reusing old password
+    if (oldPassword === newPassword) {
+      return res.status(400).json({ message: "New password must be different from old password" });
+    }
+
+    // 2. Validate matching passwords
     if (newPassword !== confirmPassword) {
       return res.status(400).json({ message: "New passwords do not match" });
     }
 
-    // 2. Find user
+    // 3. Find user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // 3. Verify old password
+    // 4. Verify old password
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Incorrect old password" });
-    }
-
-    // 4. Verify OTP
-    const otpRecord = await Otp.findOne({ email, otp });
-    if (!otpRecord) {
-      return res.status(400).json({ message: "Invalid or expired OTP" });
     }
 
     // 5. Update password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
-
-    // 6. Cleanup OTP
-    await Otp.deleteOne({ _id: otpRecord._id });
 
     res.status(200).json({ message: "Password updated successfully" });
   } catch (err) {

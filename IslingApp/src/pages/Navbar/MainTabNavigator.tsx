@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SocketService from "../../services/SocketService";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -8,30 +7,30 @@ import Notifications from "../Notifications/Notifications";
 import Activity from "../Activity/Activity";
 import Profile from "../Profile/Profile";
 import Navbar from "./Navbar";
-import ChatList from "../Chat/ChatList";
 import { useNotification } from "../../context/NotificationContext";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainTabNavigator() {
-    const { addNotification } = useNotification();
+    const { addAppointmentNotification } = useNotification();
 
     useEffect(() => {
+        const handleAppointmentStatusChanged = (data: any) => {
+            addAppointmentNotification(data);
+        };
+
         const setupSocket = async () => {
             try {
                 const userJson = await AsyncStorage.getItem("user");
-                if (userJson) {
-                    const user = JSON.parse(userJson);
-                    if (user && user.id) {
-                        SocketService.connect();
-                        SocketService.joinUserRoom(user.id);
-                        SocketService.on("appointment_status_changed", (data) => {
-                            addNotification(
-                                "Appointment Update",
-                                `Your ${data.department} appointment status is now: ${data.status}`
-                            );
-                        });
-                    }
+                if (!userJson) return;
+
+                const user = JSON.parse(userJson);
+                if (user && user.id) {
+                    SocketService.connect();
+                    SocketService.joinUserRoom(user.id);
+                    // Clear any stale listeners (e.g. after fast refresh), then bind one listener.
+                    SocketService.off("appointment_status_changed");
+                    SocketService.on("appointment_status_changed", handleAppointmentStatusChanged);
                 }
             } catch (error) {
                 console.error("Error setting up socket", error);
@@ -41,12 +40,10 @@ export default function MainTabNavigator() {
         setupSocket();
 
         return () => {
-            SocketService.off("appointment_status_changed");
-            // Note: We don't forcefully disconnect globally here if Chat might still need it,
-            // but since MainTabNavigator unmounts only on logout, it's safe to disconnect.
+            SocketService.off("appointment_status_changed", handleAppointmentStatusChanged);
             SocketService.disconnect();
         };
-    }, []);
+    }, [addAppointmentNotification]);
 
     return (
         <Tab.Navigator

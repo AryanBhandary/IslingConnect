@@ -50,11 +50,18 @@ export default function LF_ItemManagement() {
         fetchItems();
     }, [statusFilter]);
 
-    const filteredItems = items.filter(item =>
-        item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.user?.username.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredItems = items.filter(item => {
+        const term = searchTerm.toLowerCase();
+        return (
+            item.itemName.toLowerCase().includes(term) ||
+            item.category.toLowerCase().includes(term) ||
+            item.location.toLowerCase().includes(term)||
+            item.user?.username.toLowerCase().includes(term) ||
+            item.user?.phone?.includes(term) ||
+            item.reclaimer?.username.toLowerCase().includes(term) ||
+            item.reclaimer?.phone?.includes(term)
+        );
+    });
 
     return (
         <div className="mx-4 sm:mx-6 lg:mx-10 my-5">

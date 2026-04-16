@@ -33,7 +33,54 @@ const countUsers = async (req, res) => {
     }
 }
 
+const updateProfile = async (req, res) => {
+    try {
+        const { username, phone } = req.body;
+        const userId = req.user.id;
+        const trimmedUsername = typeof username === "string" ? username.trim() : "";
+        const trimmedPhone = typeof phone === "string" ? phone.trim() : "";
+
+        if (!trimmedUsername && !trimmedPhone) {
+            return res.status(400).json({ message: "Username and phone number are required" });
+        }
+
+        if (!trimmedUsername) {
+            return res.status(400).json({ message: "Username is required" });
+        }
+
+        if (!trimmedPhone) {
+            return res.status(400).json({ message: "Phone number is required" });
+        }
+
+        // Check phone uniqueness if being updated
+        const existing = await User.findOne({ phone: trimmedPhone, _id: { $ne: userId } });
+        if (existing) {
+            return res.status(409).json({ message: "Phone number is already in use" });
+        }
+
+        const updates = {};
+        updates.username = trimmedUsername;
+        updates.phone = trimmedPhone;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: updates },
+            { new: true, select: "-password" }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({ message: "Profile updated successfully", user: updatedUser });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
 module.exports = {
     getAllUsers,
-    countUsers
+    countUsers,
+    updateProfile
 }
