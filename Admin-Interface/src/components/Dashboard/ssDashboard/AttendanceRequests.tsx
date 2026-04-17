@@ -79,12 +79,12 @@ export default function AttendanceRequests() {
   });
 
   return (
-    <div className="mx-4 sm:mx-6 lg:mx-10 my-5">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
-        <h1 className="font-bold text-lg sm:text-xl">Attendance Report Requests</h1>
-        <div className="flex gap-2 items-center">
-                    <div className="p-2 flex gap-4 items-center w-full sm:w-80 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
-              <MdOutlineSearch size={24} color="#666" className="shrink-0" />
+    <div className="mx-4 md:mx-10 my-4 md:my-5">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6">
+        <h1 className="font-bold text-xl">Attendance Report Requests</h1>
+        <div className="flex flex-wrap w-full md:w-auto gap-2 items-center">
+                    <div className="p-2 flex gap-4 items-center w-full md:w-80 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
+              <MdOutlineSearch size={24} color="#666" />
               <input
                 type="text"
                 placeholder="Search by student or email..."
@@ -95,7 +95,7 @@ export default function AttendanceRequests() {
             </div>
             <button
                 onClick={fetchRequests}
-                className="p-3 bg-[var(--gray-bg)] text-black rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95 shrink-0"
+                className="p-3 bg-[var(--gray-bg)] text-black rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95"
                 title="Refresh"
             >
                 <MdRefresh size={24} className={loading ? "animate-spin" : ""} />
@@ -131,7 +131,7 @@ export default function AttendanceRequests() {
           <p className="font-medium text-lg text-gray-400">No requests found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 2xl:grid-cols-3 gap-6">
           {filteredRequests.map((req) => (
             <div key={req._id} className="bg-white rounded-[32px] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
               

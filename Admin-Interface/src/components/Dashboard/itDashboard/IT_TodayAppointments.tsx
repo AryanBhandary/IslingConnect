@@ -63,7 +63,7 @@ export default function IT_TodayAppointments() {
     });
 
     return (
-        <div className="mx-4 sm:mx-6 lg:mx-10 my-5">
+        <div className="mx-4 md:mx-10 my-4 md:my-5">
             <div className="flex justify-between items-center mb-4">
                 <div>
                     <h1 className="font-bold text-xl">Today's Appointments</h1>

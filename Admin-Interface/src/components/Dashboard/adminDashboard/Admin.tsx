@@ -21,11 +21,11 @@ export default function Admin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA]">
+    <div className="h-[100dvh] flex flex-col bg-[#FAFAFA] overflow-hidden">
       <NavBar />
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden relative">
         <AdminSidebar activePage={activePage} onNavigate={setActivePage} />
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto w-full bg-[#FAFAFA] flex flex-col">
           {renderPage()}
         </main>
       </div>

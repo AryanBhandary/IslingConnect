@@ -77,12 +77,12 @@ export default function UserManagement() {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   return (
-    <div className="mx-10 my-5">
+    <div className="mx-4 md:mx-10 my-4 md:my-5 flex-1 flex flex-col overflow-hidden min-h-0">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6">
         <h1 className="font-bold text-xl">User Management</h1>
-        <div className="flex gap-2 items-center">
-          <div className="p-2 flex gap-3 items-center w-72 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
+        <div className="flex flex-wrap w-full md:w-auto gap-2 items-center">
+          <div className="p-2 flex gap-3 items-center w-full md:w-72 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
             <MdOutlineSearch size={22} color="#666" />
             <input
               type="text"
@@ -104,7 +104,7 @@ export default function UserManagement() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-2 mb-5">
+      <div className="flex flex-wrap gap-2 mb-5">
         {(["all", "admins", "students"] as const).map((f) => (
           <button
             key={f}
@@ -121,7 +121,7 @@ export default function UserManagement() {
       </div>
 
       {/* Table */}
-      <div className="border border-[var(--gray-border)] rounded-2xl overflow-hidden shadow-sm" style={{ maxHeight: "50vh", overflowY: "auto" }}>
+      <div className="bg-white border border-[var(--gray-border)] rounded-3xl overflow-auto shadow-sm flex-1 min-h-0 custom-scrollbar relative">
         {loading ? (
           <div className="flex items-center justify-center p-20">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[var(--primary)]"></div>

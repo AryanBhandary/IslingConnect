@@ -60,12 +60,12 @@ export default function LostFoundRecords() {
   });
 
   return (
-    <div className="mx-8 my-5">
+    <div className="mx-4 md:mx-8 my-4 md:my-5">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6">
         <h1 className="font-bold text-xl">Lost & Found Records</h1>
-        <div className="flex gap-2 items-center">
-          <div className="p-2 flex gap-3 items-center w-72 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
+        <div className="flex flex-wrap w-full md:w-auto gap-2 items-center">
+          <div className="p-2 flex gap-3 items-center w-full md:w-72 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
             <MdOutlineSearch size={22} color="#666" />
             <input
               type="text"
@@ -113,7 +113,7 @@ export default function LostFoundRecords() {
           <p className="text-sm font-medium text-gray-400">No items found</p>
         </div>
       ) : (
-        <div className="border border-[var(--gray-border)] rounded-2xl overflow-hidden shadow-sm">
+        <div className="border border-[var(--gray-border)] rounded-2xl overflow-x-auto shadow-sm">
           <table className="w-full text-left text-sm">
             <thead className="bg-[var(--gray-bg)] sticky top-0">
               <tr>
