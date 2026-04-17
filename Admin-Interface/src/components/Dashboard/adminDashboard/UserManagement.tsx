@@ -77,13 +77,13 @@ export default function UserManagement() {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   return (
-    <div className="mx-4 md:mx-10 my-4 md:my-5 flex-1 flex flex-col overflow-hidden min-h-0">
+    <div className="mx-4 sm:mx-6 lg:mx-10 my-5">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6">
-        <h1 className="font-bold text-xl">User Management</h1>
-        <div className="flex flex-wrap w-full md:w-auto gap-2 items-center">
-          <div className="p-2 flex gap-3 items-center w-full md:w-72 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
-            <MdOutlineSearch size={22} color="#666" />
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+        <h1 className="font-bold text-lg sm:text-xl">User Management</h1>
+        <div className="flex gap-2 items-center flex-wrap sm:flex-nowrap">
+          <div className="p-2 flex gap-3 items-center w-full sm:w-72 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
+            <MdOutlineSearch size={22} color="#666" className="shrink-0" />
             <input
               type="text"
               placeholder="Search users..."
@@ -95,7 +95,7 @@ export default function UserManagement() {
           <RolesSelection value={roleFilter} onChange={setRoleFilter} />
           <button
             onClick={fetchUsers}
-            className="p-2.5 bg-[var(--gray-bg)] text-black rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95"
+            className="p-2.5 bg-[var(--gray-bg)] text-black rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95 shrink-0"
             title="Refresh"
           >
             <MdRefresh size={22} className={loading ? "animate-spin" : ""} />
@@ -121,7 +121,7 @@ export default function UserManagement() {
       </div>
 
       {/* Table */}
-      <div className="bg-white border border-[var(--gray-border)] rounded-3xl overflow-auto shadow-sm flex-1 min-h-0 custom-scrollbar relative">
+      <div className="border border-[var(--gray-border)] rounded-2xl overflow-hidden shadow-sm" style={{ maxHeight: "50vh", overflowY: "auto" }}>
         {loading ? (
           <div className="flex items-center justify-center p-20">
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[var(--primary)]"></div>

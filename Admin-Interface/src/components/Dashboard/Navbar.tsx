@@ -52,34 +52,35 @@ export default function NavBar() {
   return (
     <>
       <header className="border-b border-b-[var(--gray-border)] bg-white shadow-sm sticky top-0 z-50">
-        <div className="flex justify-between items-center px-4 py-3 sm:px-6 sm:py-4">
+        <div className="flex justify-between items-center px-3 py-3 sm:px-6 sm:py-4">
           
           {/* Left Side: Branding & Role */}
-          <div className="flex gap-2 sm:gap-4 items-center">
-            <div className="bg-blue-50 text-blue-600 p-2 sm:p-2.5 rounded-xl border border-blue-100 shadow-sm">
-              <MdOutlineShield size={32} />
+          <div className="flex gap-2 sm:gap-4 items-center min-w-0">
+            <div className="bg-blue-50 text-blue-600 p-2 sm:p-2.5 rounded-xl border border-blue-100 shadow-sm shrink-0">
+              <MdOutlineShield size={24} className="sm:hidden" />
+              <MdOutlineShield size={32} className="hidden sm:block" />
             </div>
-            <div className="flex flex-col">
-              <div className="font-bold text-gray-900 tracking-tight text-lg capitalize">
+            <div className="flex flex-col min-w-0">
+              <div className="font-bold text-gray-900 tracking-tight text-sm sm:text-lg capitalize truncate">
                 {getRoleText()}
               </div>
-              <div className="text-gray-500 text-sm font-medium capitalize flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                {user.username || "System Admin"}
+              <div className="text-gray-500 text-xs sm:text-sm font-medium capitalize flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>
+                <span className="truncate">{user.username || "System Admin"}</span>
               </div>
             </div>
           </div>
 
           {/* Right Side: User Info & Logout */}
-          <div className="flex justify-between items-center gap-4 sm:gap-8">
-            <div className="flex flex-col items-end hidden sm:flex">
+          <div className="flex items-center gap-3 sm:gap-8 shrink-0">
+            <div className="hidden md:flex flex-col items-end">
               <div className="font-bold text-gray-900 tracking-tight">IslingConnect</div>
               <div className="text-sm text-gray-500">{user.email || "admin@islingconnect.edu.np"}</div>
             </div>
             
             <button
               onClick={logout}
-              className="flex gap-2 items-center border border-red-100 bg-red-50 text-red-600 rounded-lg px-3 py-2 sm:px-4 hover:bg-red-600 hover:text-white hover:border-red-600 hover:shadow-md transition-all duration-300 font-medium cursor-pointer"
+              className="flex gap-2 items-center border border-red-100 bg-red-50 text-red-600 rounded-lg px-2.5 py-2 sm:px-4 hover:bg-red-600 hover:text-white hover:border-red-600 hover:shadow-md transition-all duration-300 font-medium cursor-pointer"
             >
               <span className="hidden sm:inline">Logout</span>
               <LuLogOut size={18} />

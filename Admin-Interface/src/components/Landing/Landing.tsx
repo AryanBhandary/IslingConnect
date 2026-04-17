@@ -22,7 +22,7 @@ export default function Landing() {
             <span className="text-white">Your all in one campus companion</span>
           </div>
 
-          <div className="flex flex-col gap-4 justify-center mx-auto w-[90%] md:w-[50%] lg:w-[30%] px-4 md:px-7 py-5 rounded-3xl mt-20 md:mt-30">
+          <div className="flex flex-col gap-4 justify-center mx-auto w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] px-4 sm:px-7 py-5 rounded-3xl mt-30">
             <button
                 className="w-full font-bold bg-[#1D289C] text-white py-3 rounded-3xl hover:bg-[#09138aff] cursor-pointer"
                 onClick={() => navigate("/login")}

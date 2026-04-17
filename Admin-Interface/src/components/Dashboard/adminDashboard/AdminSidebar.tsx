@@ -43,62 +43,80 @@ const navItems: { id: AdminPage; label: string; icon: React.ReactNode; color: st
 ];
 
 export default function AdminSidebar({ activePage, onNavigate }: Props) {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleNavigate = (page: AdminPage) => {
+    onNavigate(page);
+    setMobileOpen(false);
+  };
+
+  const sidebarContent = (
+    <>
+      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-3 mb-3 flex items-center gap-2">
+        <MdOutlinePeople size={14} /> Super Admin
+      </p>
+
+      {navItems.map((item) => {
+        const isActive = activePage === item.id;
+        return (
+          <button
+            key={item.id}
+            onClick={() => handleNavigate(item.id)}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 w-full text-left ${
+              isActive
+                ? "text-white shadow-sm"
+                : "text-gray-500 hover:bg-[var(--gray-bg)] hover:text-gray-800"
+            }`}
+            style={isActive ? { backgroundColor: item.color } : {}}
+          >
+            {item.icon}
+            {item.label}
+          </button>
+        );
+      })}
+    </>
+  );
 
   return (
     <>
-      {/* Mobile FAB */}
+      {/* Mobile hamburger button */}
       <button
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="md:hidden fixed bottom-6 left-6 z-[100] w-12 h-12 bg-[var(--primary)] text-white rounded-full shadow-md border border-gray-100 flex items-center justify-center hover:bg-blue-50 active:scale-95 transition-all duration-300"
+        onClick={() => setMobileOpen(true)}
+        className="lg:hidden fixed bottom-5 left-5 z-[60] bg-[var(--primary)] text-white p-3 rounded-full shadow-xl hover:shadow-2xl transition-all active:scale-95"
+        aria-label="Open menu"
       >
-        {isMobileMenuOpen ? <MdClose size={26} /> : <MdMenu size={26} />}
+        <MdMenu size={24} />
       </button>
 
-      {/* Mobile Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[90] transition-opacity" 
-          onClick={() => setIsMobileMenuOpen(false)}
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black/40 z-[70] backdrop-blur-[1px]"
+          onClick={() => setMobileOpen(false)}
         />
       )}
 
-      {/* Sidebar Container */}
-      <aside className={`
-        fixed md:sticky top-0 md:top-[65px] left-0 z-[95] md:z-40
-        w-[80%] md:w-64 h-full md:h-[calc(100vh-65px)]
-        bg-white border-r border-[var(--gray-border)] shadow-2xl md:shadow-none 
-        flex flex-col py-8 md:py-6 px-4 md:px-5 gap-2
-        transition-transform duration-300 ease-in-out
-        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-      `}>
-        <p className="flex text-[10px] font-bold text-gray-400 uppercase tracking-widest px-2 mb-4 items-center gap-2">
-          <MdOutlinePeople size={14} /> Super Admin
-        </p>
+      {/* Mobile drawer */}
+      <aside
+        className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-white z-[80] border-r border-[var(--gray-border)] flex flex-col py-6 px-3 gap-1 shadow-2xl transition-transform duration-300 ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex justify-between items-center px-3 mb-4">
+          <span className="font-bold text-sm text-gray-700">Navigation</span>
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            <MdClose size={20} className="text-gray-500" />
+          </button>
+        </div>
+        {sidebarContent}
+      </aside>
 
-        {navItems.map((item) => {
-          const isActive = activePage === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => {
-                onNavigate(item.id);
-                setIsMobileMenuOpen(false);
-              }}
-              className={`flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-sm font-bold transition-all duration-300 w-full text-left relative group overflow-hidden ${
-                isActive
-                  ? "text-white shadow-lg shadow-gray-200/50"
-                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-              }`}
-              style={isActive ? { backgroundColor: item.color } : {}}
-            >
-              <div className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
-                {item.icon}
-              </div>
-              <span className="tracking-wide z-10 relative">{item.label}</span>
-            </button>
-          );
-        })}
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex w-60 shrink-0 h-[calc(100vh-65px)] sticky top-[65px] border-r border-[var(--gray-border)] bg-white flex-col py-6 px-3 gap-1">
+        {sidebarContent}
       </aside>
     </>
   );

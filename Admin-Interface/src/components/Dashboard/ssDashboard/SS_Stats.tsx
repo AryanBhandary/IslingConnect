@@ -22,7 +22,7 @@ export default function SS_Stats() {
     }, []);
 
     return (
-        <div className="flex flex-col md:flex-row flex-wrap gap-4 mt-6 mx-4 md:mx-10">
+        <div className="grid grid-cols-2 sm:flex gap-3 sm:gap-4 mt-6 mx-4 sm:mx-6 lg:mx-10">
             <div className="statscard">
                 <div className="flex items-center justify-between">
                     <div className="font-bold text-sm text-[var(--ia-text)]">Total Requests</div>

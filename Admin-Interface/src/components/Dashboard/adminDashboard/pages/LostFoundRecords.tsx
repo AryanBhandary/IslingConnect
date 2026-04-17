@@ -60,13 +60,13 @@ export default function LostFoundRecords() {
   });
 
   return (
-    <div className="mx-4 md:mx-8 my-4 md:my-5">
+    <div className="mx-4 sm:mx-6 lg:mx-8 my-5">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6">
-        <h1 className="font-bold text-xl">Lost & Found Records</h1>
-        <div className="flex flex-wrap w-full md:w-auto gap-2 items-center">
-          <div className="p-2 flex gap-3 items-center w-full md:w-72 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
-            <MdOutlineSearch size={22} color="#666" />
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+        <h1 className="font-bold text-lg sm:text-xl">Lost & Found Records</h1>
+        <div className="flex gap-2 items-center">
+          <div className="p-2 flex gap-3 items-center w-full sm:w-72 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
+            <MdOutlineSearch size={22} color="#666" className="shrink-0" />
             <input
               type="text"
               placeholder="Search items..."
@@ -77,7 +77,7 @@ export default function LostFoundRecords() {
           </div>
           <button
             onClick={fetchItems}
-            className="p-2.5 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95"
+            className="p-2.5 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95 shrink-0"
             title="Refresh"
           >
             <MdRefresh size={22} className={loading ? "animate-spin" : ""} />
@@ -113,8 +113,9 @@ export default function LostFoundRecords() {
           <p className="text-sm font-medium text-gray-400">No items found</p>
         </div>
       ) : (
-        <div className="border border-[var(--gray-border)] rounded-2xl overflow-x-auto shadow-sm">
-          <table className="w-full text-left text-sm">
+        <div className="border border-[var(--gray-border)] rounded-2xl overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm min-w-[700px]">
             <thead className="bg-[var(--gray-bg)] sticky top-0">
               <tr>
                 <th className="p-3 font-semibold text-gray-600">Item</th>
@@ -189,6 +190,7 @@ export default function LostFoundRecords() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
     </div>

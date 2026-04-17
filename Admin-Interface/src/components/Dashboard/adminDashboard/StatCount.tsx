@@ -27,7 +27,7 @@ export default function StatCount() {
   }, []);
   return (
     <>
-      <div className="flex flex-col md:flex-row flex-wrap gap-4 mt-4 md:mt-5 mx-4 md:mx-10 mb-2">
+      <div className="grid grid-cols-2 sm:flex gap-3 sm:gap-4 mt-5 mx-4 sm:mx-6 lg:mx-10 mb-2">
         <div className="statscard">
           <div className="flex items-center justify-between">
             <div className="font-bold text-sm text-[var(--ia-text)]">Total Users</div>

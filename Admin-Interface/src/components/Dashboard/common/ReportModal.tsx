@@ -169,9 +169,9 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 bg-gray-900/40 flex justify-center items-center z-[110] backdrop-blur-sm transition-all duration-300">
-            <div className={`bg-white/95 backdrop-blur-3xl p-8 rounded-[38px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-white/60 transform transition-all duration-500 ${
-                preview ? "w-full max-w-[950px] max-h-[90vh] overflow-y-auto m-4" : "w-full max-w-[450px] m-4 scale-100"
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[100] backdrop-blur-[2px] p-3 sm:p-4">
+            <div className={`bg-white p-5 sm:p-8 rounded-[24px] sm:rounded-[38px] shadow-2xl border border-gray-100 w-full ${
+                preview ? "max-w-[950px] max-h-[90vh] overflow-y-auto" : "max-w-[450px]"
             }`}>
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center gap-3">
@@ -179,7 +179,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                             <LuFileText size={26} className="text-[var(--primary)]" />
                         </div>
                         <div>
-                            <h2 className="font-bold text-2xl text-gray-800">Generate Report</h2>
+                            <h2 className="font-bold text-xl sm:text-2xl text-gray-800">Generate Report</h2>
                             {preview && <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mt-0.5">{preview.department} - {period} Basis</p>}
                         </div>
                     </div>
@@ -196,10 +196,10 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                                 <button
                                     key={p}
                                     onClick={() => setPeriod(p)}
-                                    className={`py-3.5 rounded-2xl text-sm font-bold transition-all duration-300 ${
+                                    className={`py-3.5 rounded-2xl text-sm font-bold transition-all ${
                                         period === p
-                                            ? "bg-gradient-to-br from-gray-800 to-black text-white shadow-xl shadow-gray-300"
-                                            : "bg-gray-50/80 text-gray-500 hover:bg-gray-100/80 hover:shadow-sm"
+                                            ? "bg-gray-900 text-white shadow-lg shadow-gray-200"
+                                            : "bg-gray-50 text-gray-500 hover:bg-gray-100"
                                     }`}
                                 >
                                     {p}
@@ -209,10 +209,10 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                         <button
                             onClick={handleGenerate}
                             disabled={isGenerating}
-                            className="w-full py-4.5 mt-6 bg-gradient-to-r from-[var(--primary)] to-blue-600 text-white font-bold rounded-[22px] shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 group disabled:opacity-50 disabled:hover:translate-y-0"
+                            className="w-full py-4.5 mt-4 bg-[var(--primary)] text-white font-bold rounded-[22px] shadow-xl shadow-blue-100 hover:shadow-2xl hover:bg-blue-600 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group disabled:opacity-50"
                         >
                             {isGenerating ? (
-                                <LuLoader className="animate-spin text-white/80" size={24} />
+                                <LuLoader className="animate-spin" size={20} />
                             ) : (
                                 <>
                                     <span>Preview Report</span>
@@ -222,11 +222,11 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                     </div>
                 ) : (
                     <div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div className="col-span-1 border border-gray-100/60 rounded-[28px] p-6 bg-gradient-to-b from-gray-50/50 to-white/50 backdrop-blur-md shadow-sm">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                            <div className="md:col-span-1 border border-gray-100 rounded-[28px] p-4 sm:p-6 bg-gray-50/30">
                                 <div className="flex items-center gap-2 mb-6 text-gray-400">
-                                    <LuLayoutDashboard size={16} className="text-gray-500" />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Summary Statistics</span>
+                                    <LuLayoutDashboard size={16} />
+                                    <span className="text-[10px] font-bold uppercase tracking-widest">Summary Statistics</span>
                                 </div>
                                 <div className="space-y-4">
                                     {Object.entries(preview.summary).map(([key, value]) => (
@@ -238,7 +238,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                                 </div>
                             </div>
 
-                            <div className="col-span-2 space-y-4">
+                            <div className="md:col-span-2 space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2 text-gray-400">
                                         <LuFileText size={16} />
@@ -251,24 +251,24 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                             </div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-100/50 mt-4">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 border-t border-gray-50">
                             <button
                                 onClick={handleDownload}
                                 disabled={isDownloading}
-                                className="flex-[2] py-4.5 bg-gradient-to-r from-gray-900 to-black text-white font-bold rounded-[20px] shadow-xl shadow-gray-400/20 hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:hover:translate-y-0"
+                                className="flex-[2] py-4.5 bg-gray-900 text-white font-bold rounded-2xl shadow-xl shadow-gray-200 hover:bg-black transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                             >
                                 {isDownloading ? (
-                                    <LuLoader className="animate-spin text-white/80" size={24} />
+                                    <LuLoader className="animate-spin" size={20} />
                                 ) : (
                                     <>
-                                        <LuDownload size={22} className="group-hover:animate-bounce" />
+                                        <LuDownload size={22} />
                                         <span>Confirm and Download PDF</span>
                                     </>
                                 )}
                             </button>
                             <button
                                 onClick={() => setPreview(null)}
-                                className="flex-1 py-4.5 bg-gray-100/80 text-gray-600 font-bold rounded-[20px] hover:bg-gray-200 transition-all active:scale-95 border border-gray-200/50"
+                                className="flex-1 py-4.5 bg-gray-100 text-gray-500 font-bold rounded-2xl hover:bg-gray-200 transition-all active:scale-95"
                             >
                                 Change Settings
                             </button>

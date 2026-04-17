@@ -26,11 +26,11 @@ const roleText: Record<string, string> = {
 };
 
 const roleColor: Record<string, string> = {
-  ss_admin: "bg-[var(--primary-light)] text-[var(--primary)] border-[var(--primary-light)]",
-  lf_admin: "bg-[var(--lf-bg)] text-[var(--lf)] border-[var(--lf-bg)]",
-  pat_admin: "bg-[var(--pat-bg)] text-[var(--pat)] border-[var(--pat-bg)]",
-  it_admin: "bg-[var(--it-bg)] text-[var(--it)] border-[var(--it-bg)]",
-  user: "bg-gray-100 text-gray-700 border-gray-200",
+  ss_admin: "bg-[var(--primary-light)] text-[var(--primary)]",
+  lf_admin: "bg-[var(--lf-bg)] text-[var(--lf)]",
+  pat_admin: "bg-[var(--pat-bg)] text-[var(--pat)]",
+  it_admin: "bg-[var(--it-bg)] text-[var(--it)]",
+  user: "bg-[var(--std-bg)] text-black",
 };
 
 export default function UserList({ users, onChangeRole, onDelete }: Props) {
@@ -38,67 +38,56 @@ export default function UserList({ users, onChangeRole, onDelete }: Props) {
 
   if (users.length === 0)
     return (
-      <div className="flex flex-col items-center justify-center p-20 text-gray-400 bg-white rounded-3xl border border-dashed border-gray-200">
+      <div className="flex flex-col items-center justify-center py-16 text-gray-400">
         <p className="font-medium text-sm">No users found.</p>
       </div>
     );
 
   return (
-    <table className="w-full text-left text-sm whitespace-nowrap min-w-[800px] max-h-[400px]">
-      <thead className="bg-[#FAFAFA] sticky top-0 z-10 border-b border-[var(--gray-border)]">
-        <tr>
-          <th className="p-4 font-bold text-gray-400 uppercase text-[10px] tracking-widest pl-6">Identifier</th>
-          <th className="p-4 font-bold text-gray-400 uppercase text-[10px] tracking-widest">Contact</th>
-          <th className="p-4 font-bold text-gray-400 uppercase text-[10px] tracking-widest">Joined</th>
-          <th className="p-4 font-bold text-gray-400 uppercase text-[10px] tracking-widest">Role</th>
-          <th className="p-4 font-bold text-gray-400 uppercase text-[10px] tracking-widest text-center pr-6">Actions</th>
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-gray-50">
-        {users.map((user) => (
-          <tr
-            key={user._id}
-            className="hover:bg-gray-50/50 transition-colors duration-200 group"
-          >
-            <td className="p-4 pl-6">
-              <div className="flex flex-col gap-0.5">
-                <p className="font-bold text-gray-800 tracking-tight">{user.username}</p>
-              </div>
-            </td>
-            <td className="p-4">
-               <div className="flex flex-col gap-0.5">
-                  <span className="font-medium text-gray-600 block">{user.email}</span>
-                  <span className="text-[11px] text-gray-400">{user.phone}</span>
-               </div>
-            </td>
-            <td className="p-4">
-               <div className="flex flex-col gap-0.5">
-                  <span className="text-gray-600 font-medium">
-                    {new Date(user.createdAt).toLocaleDateString("en-GB", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </span>
-                  <span className="text-[11px] text-gray-400">
-                     {new Date(user.createdAt).toLocaleTimeString("en-GB", { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-               </div>
-            </td>
-            <td className="p-4">
-              <span className={`px-3 py-1.5 rounded-full text-[10px] font-extrabold uppercase tracking-widest border ${roleColor[user.role] ?? "bg-gray-100 text-gray-500 border-gray-200"}`}>
-                {roleText[user.role] ?? user.role}
-              </span>
-            </td>
-            <td className="p-4 text-center relative pr-6">
-              <button
-                className="p-2 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-200 cursor-pointer text-gray-500"
-                onClick={() => setOpenId(openId === user._id ? null : user._id)}
-              >
-                <IoMdMore size={18} />
-              </button>
-              {openId === user._id && (
-                <div className="absolute right-8 top-12 z-[50]">
+    <div className="overflow-x-auto">
+      <table className="w-full text-left text-sm min-w-[500px]">
+        <thead className="bg-[var(--gray-bg)] sticky top-0 z-10 border-b border-[var(--gray-border)]">
+          <tr>
+            <th className="p-3 font-semibold text-gray-600">Name</th>
+            <th className="p-3 font-semibold text-gray-600 hidden sm:table-cell">Email</th>
+            <th className="p-3 font-semibold text-gray-600 hidden md:table-cell">Phone</th>
+            <th className="p-3 font-semibold text-gray-600 hidden md:table-cell">Joined</th>
+            <th className="p-3 font-semibold text-gray-600">Role</th>
+            <th className="p-3 font-semibold text-gray-600 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr
+              key={user._id}
+              className="border-b border-[var(--gray-border)] hover:bg-gray-50 transition-colors duration-150"
+            >
+              <td className="p-3 font-medium text-gray-800">
+                <div>{user.username}</div>
+                <div className="text-xs text-gray-400 sm:hidden">{user.email}</div>
+              </td>
+              <td className="p-3 text-gray-500 hidden sm:table-cell">{user.email}</td>
+              <td className="p-3 text-gray-500 hidden md:table-cell">{user.phone}</td>
+              <td className="p-3 text-gray-500 hidden md:table-cell">
+                {new Date(user.createdAt).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </td>
+              <td className="p-3">
+                <span className={`py-1 px-3 rounded-full text-xs font-semibold ${roleColor[user.role] ?? "bg-gray-100 text-gray-500"}`}>
+                  {roleText[user.role] ?? user.role}
+                </span>
+              </td>
+              <td className="p-3 text-center relative">
+                <button
+                  className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
+                  onClick={() => setOpenId(openId === user._id ? null : user._id)}
+                >
+                  <IoMdMore size={22} className="text-gray-500" />
+                </button>
+                {openId === user._id && (
                   <Actions
                     userId={user._id}
                     currentRole={user.role}
@@ -106,12 +95,12 @@ export default function UserList({ users, onChangeRole, onDelete }: Props) {
                     onChangeRole={onChangeRole}
                     onDelete={onDelete}
                   />
-                </div>
-              )}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

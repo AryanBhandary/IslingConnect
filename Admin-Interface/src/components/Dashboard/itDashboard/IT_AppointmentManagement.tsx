@@ -67,12 +67,12 @@ export default function IT_AppointmentManagement() {
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return (
-        <div className="mx-4 md:mx-10 my-4 md:my-5">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 mb-6">
-                <h1 className="font-bold text-xl">IT Appointment Management</h1>
-                <div className="flex flex-wrap w-full md:w-auto gap-2 items-center">
-                    <div className="p-2 flex gap-4 items-center w-full md:w-80 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
-                        <MdOutlineSearch size={24} color="#666" />
+        <div className="mx-4 sm:mx-6 lg:mx-10 my-5">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+                <h1 className="font-bold text-lg sm:text-xl">IT Appointment Management</h1>
+                <div className="flex gap-2 items-center">
+                    <div className="p-2 flex gap-4 items-center w-full sm:w-80 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
+                        <MdOutlineSearch size={24} color="#666" className="shrink-0" />
                         <input
                             type="text"
                             placeholder="Search appointments..."
@@ -83,7 +83,7 @@ export default function IT_AppointmentManagement() {
                     </div>
                     <button
                         onClick={fetchAppointments}
-                        className="p-3 bg-[var(--gray-bg)] text-black rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95"
+                        className="p-3 bg-[var(--gray-bg)] text-black rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95 shrink-0"
                         title="Refresh"
                     >
                         <MdRefresh size={24} className={loading ? "animate-spin" : ""} />
@@ -117,7 +117,7 @@ export default function IT_AppointmentManagement() {
                     <p className="font-medium text-lg text-gray-400">No appointments found</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-3 2xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     {filteredAppointments.map((app) => (
                         <div key={app._id} className="bg-white rounded-[32px] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
                             {/* Row 1: Appointment Info */}
@@ -237,7 +237,7 @@ export default function IT_AppointmentManagement() {
             {/* Reschedule Modal */}
             {isRescheduling && (
                 <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[100] backdrop-blur-[1px]">
-                    <div className="bg-white p-6 rounded-2xl shadow-xl w-96 border border-[var(--gray-border)]">
+                    <div className="bg-white p-5 sm:p-6 rounded-2xl shadow-xl w-[calc(100%-2rem)] sm:w-96 max-w-md border border-[var(--gray-border)] mx-4 sm:mx-0">
                         <h2 className="font-bold text-lg mb-4">Reschedule Appointment</h2>
 
                         <div className="flex flex-col gap-4">
