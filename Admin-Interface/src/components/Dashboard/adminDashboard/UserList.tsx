@@ -30,6 +30,7 @@ export default function UserList({ users, onChangeRole }: Props) {
   };
 
   return (
+<<<<<<< Updated upstream
     <table className="w-full text-left">
       <thead className="bg-[var(--gray-bg)] sticky top-0 z-50">
         <tr>
@@ -64,19 +65,75 @@ export default function UserList({ users, onChangeRole }: Props) {
                 <IoMdMore size={24} className="cursor-pointer"
                   onClick={() => setOpenId(openId === user._id ? null : user._id)}
                 />
+=======
+    <div className="overflow-x-auto">
+      <table className="w-full text-left text-sm min-w-[500px]">
+        <thead className="bg-[var(--gray-bg)] sticky top-0 z-10 border-b border-[var(--gray-border)]">
+          <tr>
+            <th className="p-3 font-semibold text-gray-600">Name</th>
+            <th className="p-3 font-semibold text-gray-600 hidden sm:table-cell">Email</th>
+            <th className="p-3 font-semibold text-gray-600 hidden md:table-cell">Phone</th>
+            <th className="p-3 font-semibold text-gray-600 hidden md:table-cell">Joined</th>
+            <th className="p-3 font-semibold text-gray-600">Role</th>
+            <th className="p-3 font-semibold text-gray-600 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr
+              key={user._id}
+              className="border-b border-[var(--gray-border)] hover:bg-gray-50 transition-colors duration-150"
+            >
+              <td className="p-3 font-medium text-gray-800">
+                <div>{user.username}</div>
+                <div className="text-xs text-gray-400 sm:hidden">{user.email}</div>
+              </td>
+              <td className="p-3 text-gray-500 hidden sm:table-cell">{user.email}</td>
+              <td className="p-3 text-gray-500 hidden md:table-cell">{user.phone}</td>
+              <td className="p-3 text-gray-500 hidden md:table-cell">
+                {new Date(user.createdAt).toLocaleDateString("en-GB", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </td>
+              <td className="p-3">
+                <span className={`py-1 px-3 rounded-full text-xs font-semibold ${roleColor[user.role] ?? "bg-gray-100 text-gray-500"}`}>
+                  {roleText[user.role] ?? user.role}
+                </span>
+              </td>
+              <td className="p-3 text-center relative">
+                <button
+                  className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors duration-150 cursor-pointer"
+                  onClick={() => setOpenId(openId === user._id ? null : user._id)}
+                >
+                  <IoMdMore size={22} className="text-gray-500" />
+                </button>
+>>>>>>> Stashed changes
                 {openId === user._id && (
                   <Actions
                     userId={user._id}
                     currentRole={user.role}
                     onClose={() => setOpenId(null)}
                     onChangeRole={onChangeRole}
+<<<<<<< Updated upstream
+=======
+                    onDelete={onDelete}
+>>>>>>> Stashed changes
                   />
                 )}
               </td>
             </tr>
+<<<<<<< Updated upstream
           );
         })}
       </tbody>
     </table>
+=======
+          ))}
+        </tbody>
+      </table>
+    </div>
+>>>>>>> Stashed changes
   );
 }

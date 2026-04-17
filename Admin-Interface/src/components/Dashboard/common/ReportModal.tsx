@@ -169,9 +169,9 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[100] backdrop-blur-[2px]">
-            <div className={`bg-white p-8 rounded-[38px] shadow-2xl border border-gray-100 ${
-                preview ? "w-[950px] max-h-[90vh] overflow-y-auto" : "w-[450px]"
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[100] backdrop-blur-[2px] p-3 sm:p-4">
+            <div className={`bg-white p-5 sm:p-8 rounded-[24px] sm:rounded-[38px] shadow-2xl border border-gray-100 w-full ${
+                preview ? "max-w-[950px] max-h-[90vh] overflow-y-auto" : "max-w-[450px]"
             }`}>
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center gap-3">
@@ -179,7 +179,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                             <LuFileText size={26} className="text-[var(--primary)]" />
                         </div>
                         <div>
-                            <h2 className="font-bold text-2xl text-gray-800">Generate Report</h2>
+                            <h2 className="font-bold text-xl sm:text-2xl text-gray-800">Generate Report</h2>
                             {preview && <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mt-0.5">{preview.department} - {period} Basis</p>}
                         </div>
                     </div>
@@ -222,8 +222,8 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                     </div>
                 ) : (
                     <div>
-                        <div className="grid grid-cols-3 gap-6 mb-8">
-                            <div className="col-span-1 border border-gray-100 rounded-[28px] p-6 bg-gray-50/30">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                            <div className="md:col-span-1 border border-gray-100 rounded-[28px] p-4 sm:p-6 bg-gray-50/30">
                                 <div className="flex items-center gap-2 mb-6 text-gray-400">
                                     <LuLayoutDashboard size={16} />
                                     <span className="text-[10px] font-bold uppercase tracking-widest">Summary Statistics</span>
@@ -238,7 +238,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                                 </div>
                             </div>
 
-                            <div className="col-span-2 space-y-4">
+                            <div className="md:col-span-2 space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-2 text-gray-400">
                                         <LuFileText size={16} />
@@ -251,7 +251,7 @@ export default function ReportModal({ isOpen, onClose }: ReportModalProps) {
                             </div>
                         </div>
 
-                        <div className="flex gap-4 pt-4 border-t border-gray-50">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 border-t border-gray-50">
                             <button
                                 onClick={handleDownload}
                                 disabled={isDownloading}

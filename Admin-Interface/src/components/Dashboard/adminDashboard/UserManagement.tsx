@@ -82,6 +82,7 @@ export default function UserManagement() {
     );
 
   return (
+<<<<<<< Updated upstream
     <div className="mx-10 my-5">
       <h1 className="font-bold text-xl">User Management</h1>
 
@@ -132,10 +133,62 @@ export default function UserManagement() {
 
             <RolesSelection value={roleFilter} onChange={setRoleFilter} />
           </div>
+=======
+    <div className="mx-4 sm:mx-6 lg:mx-10 my-5">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+        <h1 className="font-bold text-lg sm:text-xl">User Management</h1>
+        <div className="flex gap-2 items-center flex-wrap sm:flex-nowrap">
+          <div className="p-2 flex gap-3 items-center w-full sm:w-72 bg-[var(--gray-bg)] rounded-xl border border-[var(--gray-border)] shadow-sm">
+            <MdOutlineSearch size={22} color="#666" className="shrink-0" />
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full text-sm outline-none bg-transparent"
+            />
+          </div>
+          <RolesSelection value={roleFilter} onChange={setRoleFilter} />
+          <button
+            onClick={fetchUsers}
+            className="p-2.5 bg-[var(--gray-bg)] text-black rounded-xl border border-[var(--gray-border)] hover:shadow-md transition-all active:scale-95 shrink-0"
+            title="Refresh"
+          >
+            <MdRefresh size={22} className={loading ? "animate-spin" : ""} />
+          </button>
+>>>>>>> Stashed changes
         </div>
 
+<<<<<<< Updated upstream
         {/* 🔹 User List */}
         <div className="h-full border border-[var(--gray-border)] rounded-xl overflow-scroll">
+=======
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap gap-2 mb-5">
+        {(["all", "admins", "students"] as const).map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+              filter === f
+                ? "bg-[var(--primary)] text-white shadow-lg translate-y-[-2px]"
+                : "bg-white text-gray-500 hover:bg-gray-50 border border-gray-200"
+            }`}
+          >
+            {f.charAt(0).toUpperCase() + f.slice(1)}
+          </button>
+        ))}
+      </div>
+
+      {/* Table */}
+      <div className="border border-[var(--gray-border)] rounded-2xl overflow-hidden shadow-sm" style={{ maxHeight: "50vh", overflowY: "auto" }}>
+        {loading ? (
+          <div className="flex items-center justify-center p-20">
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[var(--primary)]"></div>
+          </div>
+        ) : (
+>>>>>>> Stashed changes
           <UserList
             users={filteredUsers}
             onChangeRole={handleChangeRole}

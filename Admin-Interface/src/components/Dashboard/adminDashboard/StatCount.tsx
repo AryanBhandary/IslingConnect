@@ -27,7 +27,11 @@ export default function StatCount() {
   }, []);
   return (
     <>
+<<<<<<< Updated upstream
       <div className="flex gap-4 mt-6 ml-10">
+=======
+      <div className="grid grid-cols-2 sm:flex gap-3 sm:gap-4 mt-5 mx-4 sm:mx-6 lg:mx-10 mb-2">
+>>>>>>> Stashed changes
         <div className="statscard">
           <div className="flex items-center justify-between">
             <div className="font-bold">Total Users</div>

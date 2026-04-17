@@ -92,7 +92,7 @@ export default function Login() {
             </span>
           </div>
 
-          <div className="flex justify-center mx-auto w-[30%] px-7 py-5 rounded-3xl">
+          <div className="flex justify-center mx-auto w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] px-4 sm:px-7 py-5 rounded-3xl">
             <form
               onSubmit={handleSublit}
               className="flex flex-col w-full gap-4"
