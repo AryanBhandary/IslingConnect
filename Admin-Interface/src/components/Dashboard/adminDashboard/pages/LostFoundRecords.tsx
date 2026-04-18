@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MdOutlineSearch, MdRefresh } from "react-icons/md";
-import { LuPackage, LuUser, LuMail, LuPhone, LuMapPin, LuTag, LuCalendar, LuBadgeCheck, LuClock } from "react-icons/lu";
+import { LuPackage, LuUser, LuMail, LuPhone, LuMapPin, LuTag, LuCalendar, LuTrash2 } from "react-icons/lu";
 import api from "../../../../constants/axios";
 
 interface Item {
@@ -31,6 +31,7 @@ export default function LostFoundRecords() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "pending" | "returned">("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const fetchItems = async () => {
     setLoading(true);
@@ -45,6 +46,23 @@ export default function LostFoundRecords() {
   };
 
   useEffect(() => { fetchItems(); }, []);
+
+  const handleDelete = async (item: Item) => {
+    const ok = window.confirm(
+      `Remove this listing from Lost & Found? This cannot be undone.\n\n"${item.itemName}"`
+    );
+    if (!ok) return;
+    setDeletingId(item._id);
+    try {
+      await api.delete(`/api/lost-found/admin/items/${item._id}`);
+      setItems((prev) => prev.filter((i) => i._id !== item._id));
+    } catch (err) {
+      console.error("Failed to delete item", err);
+      window.alert("Could not delete this item. Please try again.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const filtered = items.filter((item) => {
     const term = searchTerm.toLowerCase();
@@ -124,6 +142,7 @@ export default function LostFoundRecords() {
                 <th className="p-3 font-semibold text-gray-600">Reclaimer</th>
                 <th className="p-3 font-semibold text-gray-600">Date</th>
                 <th className="p-3 font-semibold text-gray-600">Status</th>
+                <th className="p-3 font-semibold text-gray-600 w-28">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -185,6 +204,18 @@ export default function LostFoundRecords() {
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${statusBadge[item.status] ?? "bg-gray-100 text-gray-500"}`}>
                       {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                     </span>
+                  </td>
+                  <td className="p-3">
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(item)}
+                      disabled={deletingId === item._id}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-red-600 bg-red-50 border border-red-100 hover:bg-red-100 disabled:opacity-50 disabled:pointer-events-none transition-colors"
+                      title="Remove invalid or mistaken listing"
+                    >
+                      <LuTrash2 size={14} />
+                      {deletingId === item._id ? "…" : "Delete"}
+                    </button>
                   </td>
                 </tr>
               ))}

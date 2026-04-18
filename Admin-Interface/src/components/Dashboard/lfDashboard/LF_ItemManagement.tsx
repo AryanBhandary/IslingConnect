@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MdOutlineSearch, MdRefresh } from "react-icons/md";
-import { LuPackage, LuMapPin, LuCalendar, LuTag, LuUser, LuPhone, LuMail, LuBadgeCheck, LuClock } from "react-icons/lu";
+import { LuPackage, LuMapPin, LuCalendar, LuTag, LuUser, LuPhone, LuMail, LuBadgeCheck, LuClock, LuTrash2 } from "react-icons/lu";
 import api from "../../../constants/axios";
 
 interface Item {
@@ -31,6 +31,7 @@ export default function LF_ItemManagement() {
     const [statusFilter, setStatusFilter] = useState<"all" | "active" | "pending" | "returned">("all");
     const [searchTerm, setSearchTerm] = useState("");
     const [loading, setLoading] = useState(true);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     const fetchItems = async () => {
         try {
@@ -49,6 +50,25 @@ export default function LF_ItemManagement() {
     useEffect(() => {
         fetchItems();
     }, [statusFilter]);
+
+    const handleDelete = async (item: Item) => {
+        const ok = window.confirm(
+            `Remove this listing? This cannot be undone.\n\n"${item.itemName}"`
+        );
+        if (!ok) return;
+        setDeletingId(item._id);
+        try {
+            await api.delete(`/api/lost-found/admin/items/${item._id}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
+            setItems((prev) => prev.filter((i) => i._id !== item._id));
+        } catch (err) {
+            console.error("Failed to delete item", err);
+            window.alert("Could not delete this item. Please try again.");
+        } finally {
+            setDeletingId(null);
+        }
+    };
 
     const filteredItems = items.filter(item => {
         const term = searchTerm.toLowerCase();
@@ -235,6 +255,17 @@ export default function LF_ItemManagement() {
                                         <span className="text-[10px] font-bold text-gray-400 uppercase">{item.status}</span>
                                     )}
                                 </div>
+                            </div>
+                            <div className="px-6 py-3 border-t border-gray-100 flex justify-end">
+                                <button
+                                    type="button"
+                                    onClick={() => handleDelete(item)}
+                                    disabled={deletingId === item._id}
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-red-600 bg-red-50 border border-red-100 hover:bg-red-100 disabled:opacity-50 disabled:pointer-events-none transition-colors"
+                                >
+                                    <LuTrash2 size={16} />
+                                    {deletingId === item._id ? "Removing…" : "Delete listing"}
+                                </button>
                             </div>
                         </div>
                     ))}

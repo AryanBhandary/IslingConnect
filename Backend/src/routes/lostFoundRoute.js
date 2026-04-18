@@ -8,7 +8,8 @@ const {
     getAdminItems,
     getLFStats,
     generateClaimCode,
-    verifyClaim
+    verifyClaim,
+    deleteAdminItem,
 } = require("../controllers/uploadItemController");
 
 // POST /api/lost-found/report - Protected route
@@ -25,6 +26,9 @@ router.get("/admin/stats", verifyToken(["admin", "lf_admin"]), getLFStats);
 
 // GET /api/lost-found/admin/items - Protected (Only for lf_admin)
 router.get("/admin/items", verifyToken(["admin", "lf_admin"]), getAdminItems);
+
+// DELETE /api/lost-found/admin/items/:itemId - Protected (admin / lf_admin)
+router.delete("/admin/items/:itemId", verifyToken(["admin", "lf_admin"]), deleteAdminItem);
 
 // POST /api/lost-found/generate-code/:itemId - Protected (Uploader only)
 router.post("/generate-code/:itemId", verifyToken(), generateClaimCode);

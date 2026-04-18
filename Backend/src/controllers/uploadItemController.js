@@ -1,6 +1,8 @@
+const mongoose = require("mongoose");
 const LostFoundItem = require("../models/LostFoundItem");
 
 const HandoverRecord = require("../models/HandoverRecord");
+const Chat = require("../models/Chat");
 const crypto = require("crypto");
 
 const reportItem = async (req, res) => {
@@ -145,6 +147,27 @@ const getLFStats = async (req, res) => {
     }
 };
 
+const deleteAdminItem = async (req, res) => {
+    try {
+        const { itemId } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(itemId)) {
+            return res.status(400).json({ message: "Invalid item id" });
+        }
+
+        const deleted = await LostFoundItem.findByIdAndDelete(itemId);
+        if (!deleted) {
+            return res.status(404).json({ message: "Item not found" });
+        }
+
+        await HandoverRecord.deleteMany({ item: itemId });
+        await Chat.deleteMany({ item: itemId });
+
+        res.status(200).json({ message: "Item removed" });
+    } catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+};
+
 module.exports = {
     reportItem,
     getLostFoundItems,
@@ -152,5 +175,6 @@ module.exports = {
     getAdminItems,
     getLFStats,
     generateClaimCode,
-    verifyClaim
+    verifyClaim,
+    deleteAdminItem,
 };
