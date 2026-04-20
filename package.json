@@ -1,14 +1,4 @@
 {
-  "dependencies": {
-    "@react-native-async-storage/async-storage": "^2.2.0",
-    "@react-native-community/hooks": "^100.1.0",
-    "axios": "^1.13.2",
-    "expo": "^54.0.25",
-    "jwt-decode": "^4.0.0",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-linear-gradient": "^2.8.3"
-  },
   "devDependencies": {
     "@react-native-community/cli": "^20.0.2",
     "prettier": "3.6.2"
